@@ -63,26 +63,78 @@ main{max-width:1050px;margin:0 auto;padding:20px 15px 65px}header{text-align:cen
 .style-choice[data-style="old-rose-vintage"] .style-art-pics i{filter:sepia(.3) hue-rotate(-14deg)}
 .style-choice[data-style="classic-film"] .style-art-pics i{filter:grayscale(.9) contrast(1.2)}
 .strip .tile video,.strip .tile img{filter:var(--strip-filter,none)}
+
+/* Easy Studio accessibility and guided capture tools */
+.how-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:12px 0 15px}
+.how-step{background:#ffffff0e;border:1px solid #6c516b;border-radius:12px;padding:11px;font-size:12px;color:#e3cedd;min-width:0}
+.how-step b{display:block;color:#ffe9f1;font-size:13px;margin-bottom:2px}
+.utility-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin:0 0 14px}
+.utility-bar button{min-height:42px;flex:1}
+.utility-bar .pin-toggle{flex:0 0 auto}
+.progress-wrap{margin:12px 0 15px;border:1px solid #7c6075;border-radius:12px;padding:11px;background:#ffffff08}
+.progress-label{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:750;font-size:12px}
+.progress-track{height:9px;background:#5b465e;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#d884ab,#ffdb9f);border-radius:99px;transition:width .25s}
+.progress-wrap small{display:block;color:#d6b7ca;margin-top:7px}
+.advanced-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 0;border-top:1px solid #785f74;margin-top:8px}
+.advanced-tools label{font-size:12px;font-weight:750;display:flex;gap:6px;align-items:center}
+.advanced-tools select{min-height:42px;min-width:74px;width:auto;padding:8px}
+.advanced-tools button{font-size:12px;min-height:40px}
+.pairview.guides:after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(to right, transparent calc(33.33% - .6px),rgba(255,255,255,.5) 33.33%,transparent calc(33.33% + .6px),transparent calc(66.66% - .6px),rgba(255,255,255,.5) 66.66%,transparent calc(66.66% + .6px)),linear-gradient(to bottom,transparent calc(33.33% - .6px),rgba(255,255,255,.5) 33.33%,transparent calc(33.33% + .6px),transparent calc(66.66% - .6px),rgba(255,255,255,.5) 66.66%,transparent calc(66.66% + .6px));}
+.tipline{background:#ffffff0b;border-radius:10px;padding:10px 12px;color:#f0d5e4;font-size:12px;margin-top:9px}
+.tile:focus-visible{outline:4px solid #ffdf9c;outline-offset:2px}
+@media(max-width:620px){.how-strip{grid-template-columns:1fr;gap:6px}.how-step{padding:9px}.utility-bar button{flex:1 1 120px}.advanced-tools{align-items:stretch}.advanced-tools button{flex:1 1 105px}}
+@media(max-width:740px){.workspace{display:flex;flex-direction:column}.workspace .pane{order:-1;width:100%}.workspace .strip{width:100%}}
+
+/* Smart Couple Shutter: fully visible, touch-friendly review controls. */
+.shutter-head{display:flex;align-items:center;gap:9px;min-height:42px;padding:10px 13px;background:#ffffff13;border:1px solid #79586d;border-radius:12px;margin:10px 0;color:#ffe8f0;font-weight:750;font-size:13px}
+.shutter-dot{width:10px;height:10px;flex:none;border-radius:50%;background:#aa899c;box-shadow:0 0 0 4px #ffffff10}
+.shutter-head[data-phase="ready"] .shutter-dot{background:#57d6a0}
+.shutter-head[data-phase="counting"] .shutter-dot{background:#ffca70;animation:blinkShutter .6s infinite alternate}
+.shutter-head[data-phase="review"] .shutter-dot{background:#eaa0df}
+.shutter-fixed{margin-left:auto;white-space:nowrap;background:#59324a;padding:3px 8px;border-radius:50px;font-size:11px}
+.review-panel{background:linear-gradient(145deg,#50304e,#302134);border:1px solid #e5a5c1;border-radius:15px;padding:15px;margin:15px 0;box-shadow:0 12px 24px #0002}
+.review-panel h3{font:italic 23px Georgia,serif;margin:0 0 5px;color:#ffe2ec}
+.review-panel p{margin:2px 0 12px;color:#e7d0e1;font-size:12px;line-height:1.5}
+.review-votes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:13px}
+.review-votes span{flex:1;min-width:105px;border:1px solid #785975;border-radius:10px;padding:9px;color:#fff3f8;font-weight:700;text-align:center;font-size:12px;background:#241b31}
+.review-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.review-controls button{min-height:52px}
+.review-controls button.choice{box-shadow:0 0 0 3px #ffe7ed77;outline:1px solid white}
+.count small{display:block;font:700 15px system-ui;letter-spacing:1px;margin-top:4px}
+@keyframes blinkShutter{to{opacity:.3;transform:scale(.8)}}
+@media(max-width:420px){.review-controls{grid-template-columns:1fr}.shutter-head{font-size:11px}}
 </style>
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 </head>
 <body>
 <main>
 <header><div class="label">♡ together apart · real-time posing studio ♡</div><h1>Pose together, miles apart</h1><p>See both cameras in your four-moment strip. One countdown, two smiles.</p></header>
-<section class="setup" aria-label="Room connection">
+<div class="how-strip" aria-label="Three easy steps">
+<div class="how-step"><b>① Connect</b>Choose opposite sides and enable both cameras.</div>
+<div class="how-step"><b>② Pose together</b>Watch each other live and take four pairs.</div>
+<div class="how-step"><b>③ Keep forever</b>Choose a design, preview, then save PNG.</div>
+</div>
+<section aria-label="Room connection" class="setup">
  <label class="field">Room code<input id="room" maxlength="10" autocomplete="off" placeholder="10-character code"></label>
  <label class="field">6-digit private PIN<input id="pin" type="password" maxlength="6" inputmode="numeric" autocomplete="off" placeholder="••••••"></label>
  <label class="field">My side<select id="side"><option value="A">A · left</option><option value="B">B · right</option></select></label>
  <button id="join">📹 Enable & connect</button>
 </section>
-<div id="status" class="status" role="status" aria-live="polite">Enter the same room code and PIN on both devices. Select opposite sides.</div>
-<section class="style-picker" aria-label="Photostrip design gallery"><div class="style-picker-head"><strong>Pick your photostrip style ♡</strong><span>16 designs · selected: <b id="chosenStyleLabel">Blush Romance</b></span></div><div id="themeGallery" class="theme-gallery" role="group" aria-label="Choose a photostrip design"></div><div class="vintage-collection-title">✦ Vintage Collection <span>4 new timeless looks</span></div><div id="vintageGallery" class="theme-gallery" role="group" aria-label="Choose a vintage photostrip design"></div><input id="theme" type="hidden" value="blush"></section>
+<div class="utility-bar" aria-label="Room and privacy shortcuts">
+<button class="ghost" type="button" id="invitePartner">♡ Copy partner link (no PIN)</button>
+<button class="ghost pin-toggle" type="button" id="togglePin" aria-controls="pin" aria-pressed="false">Show PIN</button>
+<button class="ghost" type="button" id="helpCamera">? Connection help</button>
+</div>
+<div aria-live="polite" class="status" id="status">Enter the same room code and PIN on both devices. Select opposite sides.</div>
+
 <div class="workspace">
 <section class="strip" id="themeTarget" aria-label="Four-pair photo strip">
 <div class="striptitle">Our little moments ♡</div><div class="stripsub">TWO HEARTS · ONE FRAME</div>
 <div class="stripheaders"><span>SIDE A · LEFT</span><span>SIDE B · RIGHT</span></div>
 <div id="rows"></div>
 <div class="stripbottom">Together, even from afar ♡</div>
+<div class="progress-wrap" aria-label="Photo completion progress"><div class="progress-label"><span id="progressText">0 of 8 photos · 0 complete pairs</span><span id="progressPercent">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><small id="progressHelp">Start by connecting both cameras.</small></div>
 </section>
 <section class="pane">
  <span class="pill" id="connection">○ Not connected</span>
@@ -90,12 +142,27 @@ main{max-width:1050px;margin:0 auto;padding:20px 15px 65px}header{text-align:cen
  <p class="note">You can see each other's poses in real time when both devices are connected. Tap a row in the strip to select it.</p>
  <div class="pair"><div class="pairview"><video id="selfVideo" autoplay playsinline muted></video><div class="hint" id="selfHint">Enable your camera</div><div class="corner">YOU</div></div><div class="pairview"><video id="remoteVideo" autoplay playsinline muted></video><div class="hint" id="remoteHint">Waiting for your partner</div><div class="corner">PARTNER</div></div></div>
  <p style="margin:12px 0 3px">Taking photo pair <strong id="slotNum">1</strong> of 4</p>
- <div class="controls"><button id="capture" disabled>📸 Capture together · 3s</button><button id="flip" class="alt" disabled>⇄ Flip camera</button><button id="save" class="ghost">👁 Preview & download strip</button><button id="disconnect" class="ghost" disabled>✕ Stop cameras</button></div>
- <div id="captureInfo" class="note">Both partners must connect to capture a paired photo.</div>
- <div class="help"><strong>How to use:</strong> Open this same GitHub Pages link on both phones. Enter the Apps Script photobooth room code and PIN. Creator chooses A and partner chooses B. Enable both cameras. See your poses side-by-side and press Capture together. Your 4 paired moments appear in the strip.<br><br><strong>Saving to Google Drive:</strong> Launch this camera site using <em>Start live preview</em> inside the Apps Script booth to send your own captured picture back for review and saving there. If opened directly, download the completed strip here.</div>
+ <div class="shutter-head" aria-live="polite"><span class="shutter-dot" id="shutterDot"></span><span id="shutterPhase">Camera idle · connect both partners</span><span class="shutter-fixed">5s sync</span></div>
+<div class="advanced-tools" aria-label="Useful photo controls">
+<label for="timerSeconds">Synchronized countdown <select id="timerSeconds" aria-label="Synchronized countdown" disabled><option value="5" selected>5 seconds · fixed</option></select></label>
+<button class="ghost" type="button" id="poseGrid" aria-pressed="false">⊞ Pose grid: off</button>
+<button class="ghost" type="button" id="nextEmpty">→ Next unfinished pair</button>
+</div>
+<div class="controls"><button disabled id="capture">📸 Smart Couple Shutter · 5s</button><button id="cancelShutter" class="ghost hidden" type="button">✕ Cancel countdown</button><button id="flip" class="alt" disabled>⇄ Flip camera</button><button id="save" class="ghost">👁 Preview & download strip</button><button id="disconnect" class="ghost" disabled>✕ Stop cameras</button></div>
+ <div class="tipline" id="studioTip">Smart shutter: both cameras must be ready. Capture at the same agreed time, then approve together.</div>
+<div class="note" id="captureInfo" aria-live="polite">Both partners must connect before a coordinated photo.</div>
+<div class="review-panel hidden" id="reviewPanel" role="region" aria-live="polite" aria-label="Review paired photos">
+ <h3 id="reviewTitle">Review together ♡</h3>
+ <p id="reviewMessage">Wait for both pictures, then choose Keep or Retake. Both partners must agree.</p>
+ <div class="review-votes"><span id="voteA">A: Waiting</span><span id="voteB">B: Waiting</span></div>
+ <div class="review-controls"><button type="button" id="keepPair">♥ Keep this pair</button><button type="button" class="ghost" id="retakePair">↻ Retake together</button></div>
+ <button class="ghost hidden" type="button" id="discardIncomplete" style="margin-top:9px;width:100%">↺ Retry incomplete capture</button>
+</div>
+ <div class="help"><strong>Smart Couple Shutter:</strong> Both partners must be connected. Either person taps Smart Shutter, both phones run the same 5-second countdown with a flash. Check both photos and have EACH partner choose Keep or Retake. If you both keep, the next incomplete row opens automatically. You can cancel before capture.<br><br><strong>How to use:</strong> Open this same GitHub Pages link on both phones. Enter the Apps Script photobooth room code and PIN. Creator chooses A and partner chooses B. Enable both cameras. See your poses side-by-side and press Capture together. Your 4 paired moments appear in the strip.<br><br><strong>Saving to Google Drive:</strong> Launch this camera site using <em>Start live preview</em> inside the Apps Script booth to send your own captured picture back for review and saving there. If opened directly, download the completed strip here.</div>
  <p class="small">Camera video is transmitted via WebRTC and is not recorded on a server by this page. The free third-party PeerJS signaling service helps connect your devices. TURN relay is not configured, so some mobile or corporate networks cannot connect. Use this for casual photos, not sensitive/private video.</p>
 </section>
 </div>
+<section class="style-picker" aria-label="Photostrip design gallery"><div class="style-picker-head"><strong>Pick your photostrip style ♡</strong><span>16 designs · selected: <b id="chosenStyleLabel">Blush Romance</b></span></div><div id="themeGallery" class="theme-gallery" role="group" aria-label="Choose a photostrip design"></div><div class="vintage-collection-title">✦ Vintage Collection <span>4 new timeless looks</span></div><div id="vintageGallery" class="theme-gallery" role="group" aria-label="Choose a vintage photostrip design"></div><input id="theme" type="hidden" value="blush"></section>
 </main>
 <div id="stripPreview" class="strip-preview-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="stripPreviewTitle">
  <div class="strip-preview-card">
@@ -106,7 +173,7 @@ main{max-width:1050px;margin:0 auto;padding:20px 15px 65px}header{text-align:cen
  </div>
 </div>
 <div id="downloadToast" class="download-toast" role="status" aria-live="polite"></div>
-<div id="count" class="count">3</div><div id="flash" class="flash"></div>
+<div id="count" class="count">5</div><div id="flash" class="flash"></div>
 <script>
 'use strict';
 const $=id=>document.getElementById(id), query=new URLSearchParams(location.search);
@@ -148,11 +215,10 @@ function mountStyleGallery(){
     btn.title=s.name;btn.setAttribute('aria-label','Select '+s.name+' photostrip');btn.innerHTML=stripStyleMarkup(s);
     btn.addEventListener('click',()=>setStripStyle(s.id));(s.vintage?vintageGallery:gallery).appendChild(btn);
   });
-  setStripStyle('blush',false);
-}
+  let remembered='blush';try{remembered=localStorage.getItem('ta.favoriteStyle')||'blush';}catch(e){}setStripStyle(remembered,false); }
 function setStripStyle(id,announce=true){
   const style=STRIP_STYLES.find(s=>s.id===id);if(!style)return;
-  currentStripStyle=id;
+  currentStripStyle=id;try{localStorage.setItem('ta.favoriteStyle',id);}catch(e){}
   const themeInput=document.getElementById('theme');if(themeInput)themeInput.value=id;
   const previewBox=document.getElementById('themeTarget');
   if(previewBox){
@@ -172,7 +238,7 @@ function setStripStyle(id,announce=true){
 }
 function stripStyleOptions(){return STRIP_STYLES.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join('');}
 
-const state={stream:null,front:true,peer:null,peerId:'',otherId:'',conn:null,call:null,partnerStream:null,joined:false,role:'A',room:'',row:1,shots:Array.from({length:4},()=>({A:null,B:null})),busy:false,closed:false,refreshTimer:null,helloTimer:null,photoAckTimer:null,photoToSend:'',activeShotId:'',remoteConnected:false,lastPairState:false,previewRow:true};
+const state={stream:null,front:true,peer:null,peerId:'',otherId:'',conn:null,call:null,partnerStream:null,joined:false,role:'A',room:'',row:1,shots:Array.from({length:4},()=>({A:null,B:null})),busy:false,closed:false,refreshTimer:null,helloTimer:null,photoAckTimer:null,photoToSend:'',activeShotId:'',remoteConnected:false,lastPairState:false,previewRow:true,pending:null,review:null,shutterTimer:null,shutterPhase:'idle'};
 const validJpeg=s=>typeof s==='string'&&s.startsWith('data:image/jpeg;base64,')&&s.length<1250000;
 const safeHtml=s=>String(s||'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
 function status(message,tone=''){const el=$('status');el.textContent=message;el.className='status '+tone;}
@@ -183,14 +249,62 @@ function pairedFrame(){const c=document.createElement('canvas');c.width=420;c.he
 function startFrames(){clearInterval(state.refreshTimer);if(!bridge)return;state.refreshTimer=setInterval(()=>{if(state.closed||!state.stream||state.busy)return;const leftVid=$(state.role==='A'?'selfVideo':'remoteVideo');const rightVid=$(state.role==='B'?'selfVideo':'remoteVideo');const left=jpg(leftVid,180,216,state.role==='A'&&state.front,.5);const right=jpg(rightVid,180,216,state.role==='B'&&state.front,.5);const frame=pairedFrame();if(frame.length<110000)notify('TA_CAMERA_PREVIEW',{frame,left,right});},800);}
 function localVid(){return $('selfVideo');}
 function remoteReady(){return !!(state.partnerStream&&$('remoteVideo').videoWidth&&state.conn&&state.conn.open);}
-function updateButtons(){const paired=remoteReady();if(state.lastPairState!==paired){state.lastPairState=paired;notify('TA_CAMERA_PAIR_STATE',{ready:paired});}$('capture').disabled=!state.stream||!paired||state.busy||state.row>4;$('flip').disabled=!state.stream||state.busy;$('disconnect').disabled=!state.stream&&!state.peer;$('join').disabled=!!state.joined;$('connection').textContent=remoteReady()?'● Connected together':state.joined?'◌ Waiting for partner':'○ Not connected';}
-function buildStrip(){const root=$('rows');root.innerHTML='';for(let n=1;n<=4;n++){const row=document.createElement('div');row.className='striprow';for(const side of ['A','B']){const cell=document.createElement('div');cell.className='tile '+(n===state.row?'active':'');cell.dataset.row=n;cell.dataset.side=side;const tag=document.createElement('span');tag.className='tag';tag.textContent='SHOT '+n;cell.appendChild(tag);const shot=state.shots[n-1][side];if(n===state.row&&state.previewRow){const vid=document.createElement('video');vid.autoplay=true;vid.playsInline=true;vid.muted=true;const own=state.role===side;vid.id='tileVideo'+side;if(own&&state.front)vid.classList.add('mirror');vid.srcObject=own?state.stream:state.partnerStream;cell.appendChild(vid);vid.play().catch(()=>{});if(!vid.srcObject){const hint=document.createElement('div');hint.className='empty';hint.innerHTML='<b>♡</b>'+(own?'Enable camera':'Waiting for partner');cell.appendChild(hint);}}else if(shot){const img=document.createElement('img');img.src=shot;img.alt='Captured shot '+n+' side '+side;cell.appendChild(img);}else if(n===state.row){const vid=document.createElement('video');vid.autoplay=true;vid.playsInline=true;vid.muted=true;const own=state.role===side;vid.id='tileVideo'+side;if(own&&state.front)vid.classList.add('mirror');vid.srcObject=own?state.stream:state.partnerStream;cell.appendChild(vid);vid.play().catch(()=>{});if(!vid.srcObject){const hint=document.createElement('div');hint.className='empty';hint.innerHTML='<b>♡</b>'+(own?'Enable camera':'Waiting for partner');cell.appendChild(hint);}}else{const hint=document.createElement('div');hint.className='empty';hint.innerHTML='<b>♡</b>Moment '+n;cell.appendChild(hint);}cell.addEventListener('click',()=>{if(!state.busy)changeRow(n,true);});row.appendChild(cell);}root.appendChild(row);} $('slotNum').textContent=state.row;updateButtons();}
-function changeRow(n,share){if(!Number.isInteger(n)||n<1||n>4)return;state.row=n;state.previewRow=true;buildStrip();if(share){send({type:'slot',row:n});notify('TA_CAMERA_SLOT',{slot:n});}}
+function shutterStatus(phase,message){
+  const was=state.shutterPhase;state.shutterPhase=phase;const head=$('shutterPhase').parentElement;head.dataset.phase=phase;if(was!==phase && (phase==='counting'||phase==='review'||phase==='idle'||phase==='ready'))notify('TA_CAMERA_REVIEW_STATUS',{phase,message,row:state.row});
+  $('shutterPhase').textContent=message;const reviewing=!!state.review;
+  $('reviewPanel').classList.toggle('hidden',!reviewing);
+  if(reviewing){
+    const r=state.review;
+    $('reviewTitle').textContent='Moment '+r.row+' · decide together ♡';
+    $('reviewMessage').textContent=(!r.candidate.A||!r.candidate.B)
+      ? 'Waiting for both captured pictures. Keep and Retake will unlock when both arrive.'
+      : (r.votes.A===null||r.votes.B===null?'Both partners choose Keep or Retake. Your choice is sent to the other phone.':
+         r.votes.A!==r.votes.B?'You selected different options. One partner can change their choice to agree.':'Both choices received.');
+    for(const side of ['A','B'])$('vote'+side).textContent=side+': '+(r.votes[side]===null?'Waiting':r.votes[side]==='keep'?'♥ Keep':'↻ Retake');
+    const selectable=!!r.candidate.A&&!!r.candidate.B;
+    $('discardIncomplete').classList.toggle('hidden',selectable||!r.timedOut);
+    $('keepPair').disabled=!selectable;
+    $('retakePair').disabled=!selectable;
+    $('keepPair').classList.toggle('choice',r.votes[state.role]==='keep');
+    $('retakePair').classList.toggle('choice',r.votes[state.role]==='retake');
+  }
+}
+function updateButtons(){
+  const paired=remoteReady();if(state.lastPairState!==paired){state.lastPairState=paired;notify('TA_CAMERA_PAIR_STATE',{ready:paired});}
+  $('capture').disabled=!state.stream||!paired||state.busy||state.row>4;
+  $('capture').textContent='📸 Smart Couple Shutter · 5s';
+  $('flip').disabled=!state.stream||state.busy;
+  $('disconnect').disabled=!state.stream&&!state.peer;
+  $('join').disabled=!!state.joined;
+  $('nextEmpty').disabled=state.busy;
+  $('cancelShutter').classList.toggle('hidden',!state.pending);
+  $('connection').textContent=paired?'● Connected together':state.joined?'◌ Waiting for partner':'○ Not connected';
+  if(state.review)shutterStatus('review','Review moment '+state.review.row+' · both must agree');
+  else if(!state.pending)shutterStatus(paired?'ready':'idle',paired?'Both cameras ready · tap Smart Shutter':'Waiting for both cameras');
+}
+function updatePhotoProgress(){
+ const count=state.shots.reduce((n,r)=>n+Number(!!r.A)+Number(!!r.B),0);
+ const complete=state.shots.filter(r=>r.A&&r.B).length;
+ $('progressText').textContent=count+' of 8 photos · '+complete+' complete pair'+(complete===1?'':'s');
+ $('progressPercent').textContent=Math.round(count/8*100)+'%';$('progressFill').style.width=(count/8*100)+'%';
+ $('progressHelp').textContent=complete===4?'All four moments are ready! Preview your strip and try different designs.':(count===0?'Your photos will appear here after the countdown.':'Select a row to retake it, or choose Next unfinished pair.');
+}
+function buildStrip(){const root=$('rows');root.innerHTML='';for(let n=1;n<=4;n++){const row=document.createElement('div');row.className='striprow';for(const side of ['A','B']){const cell=document.createElement('div');cell.className='tile '+(n===state.row?'active':'');cell.dataset.row=n;cell.dataset.side=side;const tag=document.createElement('span');tag.className='tag';tag.textContent='SHOT '+n;cell.appendChild(tag);const shot=(state.review&&state.review.row===n&&state.review.candidate[side])||state.shots[n-1][side];if(n===state.row&&state.previewRow){const vid=document.createElement('video');vid.autoplay=true;vid.playsInline=true;vid.muted=true;const own=state.role===side;vid.id='tileVideo'+side;if(own&&state.front)vid.classList.add('mirror');vid.srcObject=own?state.stream:state.partnerStream;cell.appendChild(vid);vid.play().catch(()=>{});if(!vid.srcObject){const hint=document.createElement('div');hint.className='empty';hint.innerHTML='<b>♡</b>'+(own?'Enable camera':'Waiting for partner');cell.appendChild(hint);}}else if(shot){const img=document.createElement('img');img.src=shot;img.alt='Captured shot '+n+' side '+side;cell.appendChild(img);}else if(n===state.row){const vid=document.createElement('video');vid.autoplay=true;vid.playsInline=true;vid.muted=true;const own=state.role===side;vid.id='tileVideo'+side;if(own&&state.front)vid.classList.add('mirror');vid.srcObject=own?state.stream:state.partnerStream;cell.appendChild(vid);vid.play().catch(()=>{});if(!vid.srcObject){const hint=document.createElement('div');hint.className='empty';hint.innerHTML='<b>♡</b>'+(own?'Enable camera':'Waiting for partner');cell.appendChild(hint);}}else{const hint=document.createElement('div');hint.className='empty';hint.innerHTML='<b>♡</b>Moment '+n;cell.appendChild(hint);}cell.setAttribute('role','button');cell.tabIndex=0;cell.setAttribute('aria-label','Select paired moment '+n);cell.addEventListener('click',()=>{if(!state.busy)changeRow(n,true);});cell.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!state.busy){e.preventDefault();changeRow(n,true);}});row.appendChild(cell);}root.appendChild(row);} $('slotNum').textContent=state.row;updateButtons();updatePhotoProgress();}
+function changeRow(n,share){if(state.busy||!Number.isInteger(n)||n<1||n>4)return;state.row=n;state.previewRow=true;buildStrip();if(share){send({type:'slot',row:n});notify('TA_CAMERA_SLOT',{slot:n});}}
 function send(data){try{if(state.conn&&state.conn.open)state.conn.send(data);}catch(e){console.warn('Data channel:',e);}}
-function bindData(conn){if(!conn||conn.peer!==state.otherId){try{conn.close();}catch(e){}return;}if(state.conn&&state.conn!==conn){try{state.conn.close();}catch(e){}}state.conn=conn;conn.on('open',()=>{if(state.conn!==conn)return;state.remoteConnected=true;status('Partner found. Connecting live video…');send({type:'hello'});if(state.role==='A')dialVideo();updateButtons();});conn.on('data',onData);conn.on('close',()=>{if(state.conn===conn){state.conn=null;state.remoteConnected=false;state.partnerStream=null;$('remoteVideo').srcObject=null;$('remoteHint').classList.remove('hidden');status('Your partner disconnected. Waiting for reconnection…');buildStrip();}});conn.on('error',()=>{});}
+function bindData(conn){if(!conn||conn.peer!==state.otherId){try{conn.close();}catch(e){}return;}if(state.conn&&state.conn!==conn){try{state.conn.close();}catch(e){}}state.conn=conn;conn.on('open',()=>{if(state.conn!==conn)return;state.remoteConnected=true;status('Partner found. Connecting live video…');send({type:'hello'});if(state.role==='A')dialVideo();updateButtons();});conn.on('data',onData);conn.on('close',()=>{if(state.conn===conn){state.conn=null;state.remoteConnected=false;state.partnerStream=null;$('remoteVideo').srcObject=null;$('remoteHint').classList.remove('hidden');shutterAbort('Partner disconnected. Countdown canceled.',false);status('Partner disconnected. Reconnect to keep taking photos.');buildStrip();}});conn.on('error',()=>{});}
 function dialVideo(){if(!state.peer||!state.stream||!state.conn||!state.conn.open||state.role!=='A'||state.call)return;attachCall(state.peer.call(state.otherId,state.stream));}
 function attachCall(call){if(!call||call.peer!==state.otherId){try{call.close();}catch(e){}return;}if(state.call&&state.call!==call){try{state.call.close();}catch(e){}}state.call=call;call.on('stream',stream=>{if(state.call!==call)return;state.partnerStream=stream;const v=$('remoteVideo');v.srcObject=stream;v.play().catch(()=>{});$('remoteHint').classList.add('hidden');status('Connected! See each other pose live, then capture together. ♡','ok');buildStrip();});call.on('close',()=>{if(state.call===call){state.call=null;state.partnerStream=null;$('remoteVideo').srcObject=null;$('remoteHint').classList.remove('hidden');status('Video disconnected. Your partner may need to reconnect.');buildStrip();}});call.on('error',e=>{status('Video error: '+(e.message||'Unable to connect'), 'bad');});}
-function onData(d){if(!d||typeof d!=='object')return;if(d.type==='slot'&&Number.isInteger(d.row)&&!state.busy)changeRow(d.row,false);if(d.type==='shutter'&&Number.isInteger(d.row)&&!state.busy)startCountdown(d.row,d.id);if(d.type==='shot'&&Number.isInteger(d.row)&&d.row>=1&&d.row<=4&&d.side!==state.role&&d.side===(state.role==='A'?'B':'A')&&validJpeg(d.image)&&d.image.length<160000){state.shots[d.row-1][d.side]=d.image;buildStrip();$('captureInfo').textContent='Photo '+d.row+' received from your partner. ♡';}}
+function onData(d){
+  if(!d||typeof d!=='object')return;
+  if(d.type==='slot'&&Number.isInteger(d.row)&&!state.busy)changeRow(d.row,false);
+  if(d.type==='shot'&&Number.isInteger(d.row)&&d.row>=1&&d.row<=4&&d.side!==(state.role)&&d.side===(state.role==='A'?'B':'A')&&validJpeg(d.image)&&d.image.length<160000){
+    // Photos are private drafts until both partners approve them.
+    if(state.review&&state.review.id===d.id&&state.review.row===d.row){state.review.candidate[d.side]=d.image;if(state.review.candidate.A&&state.review.candidate.B)clearTimeout(state.review.waitTimer);renderReview();}
+    else if(state.pending&&state.pending.id===d.id&&state.pending.row===d.row){state.pending.remoteDraft=d.image;}
+  }
+  if(['prepare','ready','start','started','abort','vote','keep-commit','retake-confirm'].includes(d.type))receiveSmart(d);
+}
 async function hashId(value){const bytes=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,32);}
 async function startCamera(){if(state.stream)return;status('Requesting camera permission…');if(!isSecureContext||!navigator.mediaDevices?.getUserMedia)throw Error('Open your GitHub Pages HTTPS site in Chrome or Safari.');state.stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:state.front?'user':'environment'},width:{ideal:960},height:{ideal:1200}}});const v=$('selfVideo');v.srcObject=state.stream;v.classList.toggle('mirror',state.front);await v.play();$('selfHint').classList.add('hidden');notify('TA_CAMERA_READY');startFrames();buildStrip();}
 async function join(){if(state.joined)return;const room=$('room').value.trim().toUpperCase(),pin=$('pin').value.trim(),side=$('side').value;if(!/^[A-Z0-9]{10}$/.test(room))return status('Enter the 10-character room code from your photobooth.', 'bad');if(!/^\d{6}$/.test(pin))return status('Enter the 6-digit room PIN.', 'bad');if(!window.Peer)return status('PeerJS could not load. Check internet or disable blockers for unpkg.com.', 'bad');try{state.role=side;state.room=room;await startCamera();state.peerId='talive4-'+await hashId(room+':'+pin+':webrtc')+'-'+side.toLowerCase();state.otherId=state.peerId.slice(0,-1)+(side==='A'?'b':'a');const peer=new Peer(state.peerId,{debug:1});state.peer=peer;state.joined=true;status('Camera enabled. Waiting for partner to open the same room and connect…');peer.on('open',()=>{status('Connected to signaling. Waiting for your partner…');if(side==='A')tryPartner();});peer.on('connection',conn=>{if(conn.peer===state.otherId)bindData(conn);else conn.close();});peer.on('call',call=>{if(call.peer!==state.otherId){call.close();return;}attachCall(call);call.answer(state.stream);});peer.on('error',e=>{if(state.closed)return;if(e.type==='peer-unavailable'){status('Waiting for your partner to connect…');}else if(e.type==='unavailable-id'){status('This side is already connected elsewhere. Choose the other side or close the old tab.', 'bad');}else status('Connection error: '+(e.message||e.type||'Try again'), 'bad');});peer.on('disconnected',()=>status('Signaling disconnected. Reconnect by refreshing this page.', 'bad'));peer.on('close',()=>{if(!state.closed)status('Connection closed. Reload to reconnect.', 'bad');});updateButtons();buildStrip();}catch(e){status(e.name==='NotAllowedError'?'Allow camera permission in your browser settings and try again.':e.name==='NotFoundError'?'No camera found on this device.':e.message||'Unable to start camera.', 'bad');state.joined=false;updateButtons();}}
@@ -198,10 +312,173 @@ function tryPartner(){if(!state.joined||!state.peer||state.peer.disconnected||!s
 setInterval(()=>{if(state.joined&&state.role==='A'&&(!state.conn||!state.conn.open)&&!state.closed)tryPartner();},5500);
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 async function flip(){if(!state.stream||state.busy)return;state.front=!state.front;const old=state.stream;try{const stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:state.front?'user':'environment'},width:{ideal:960},height:{ideal:1200}}});state.stream=stream;$('selfVideo').srcObject=stream;$('selfVideo').classList.toggle('mirror',state.front);await $('selfVideo').play();old.getTracks().forEach(t=>t.stop());if(state.call&&state.call.peerConnection){const sender=state.call.peerConnection.getSenders().find(s=>s.track?.kind==='video');if(sender)await sender.replaceTrack(stream.getVideoTracks()[0]);}buildStrip();status('Camera switched. ♡','ok');}catch(e){state.front=!state.front;status('Could not switch camera. '+(e.message||''), 'bad');}}
-function capture(){if(state.busy||!remoteReady())return;const id=crypto.randomUUID?crypto.randomUUID():String(Date.now()),row=state.row;send({type:'shutter',row,id});startCountdown(row,id);}
-async function startCountdown(row,id){if(state.busy||row<1||row>4)return;state.busy=true;state.activeShotId=id;state.row=row;buildStrip();const el=$('count');el.classList.add('show');try{for(let n=3;n>=1;n--){el.textContent=n;notify('TA_CAMERA_COUNTDOWN',{seconds:n});await wait(1000);}el.classList.remove('show');$('flash').style.opacity='1';setTimeout(()=>$('flash').style.opacity='0',150);if(!state.stream||!localVid().videoWidth)throw Error('Camera not ready.');let local='';for(const q of [.82,.7,.57,.43]){local=jpg(localVid(),720,900,state.front,q);if(validJpeg(local))break;}if(!validJpeg(local))throw Error('Photo too large for upload. Try again.');state.shots[row-1][state.role]=local;const miniature=jpg(localVid(),350,420,state.front,.57);if(miniature.length<155000)send({type:'shot',row,side:state.role,image:miniature});bridgeShot(local,row);$('captureInfo').textContent='Shot '+row+' captured! You can retake a row or continue to the next.';if(row<4)changeRow(row+1,true);else{state.previewRow=false;buildStrip();}status('Photo '+row+' captured! Save it in the photobooth tab, or download the strip.','ok');}catch(e){status(e.message||'Capture failed.','bad');}finally{el.classList.remove('show');state.busy=false;updateButtons();}}
+// Smart Couple Shutter v2: prepare -> ready -> synchronized start -> photos -> both vote.
+// A small prepare/ready exchange estimates the clock difference between two devices.
+// This reduces timing skew but cannot eliminate browser scheduling/network latency.
+const SHUTTER_SECONDS=5;
+function randomShotId(){return crypto.randomUUID?crypto.randomUUID():(Date.now().toString(36)+Math.random().toString(36).slice(2));}
+function validateShot(d){return typeof d.id==='string'&&d.id.length<90&&d.id.length>5&&Number.isInteger(d.row)&&d.row>=1&&d.row<=4;}
+function clearShutterTimer(){clearInterval(state.shutterTimer);state.shutterTimer=null;$('count').classList.remove('show');}
+function shutterAbort(message,share=true){
+  const p=state.pending;
+  if(share&&p)send({type:'abort',id:p.id,row:p.row});
+  if(p?.timeout)clearTimeout(p.timeout);
+  clearShutterTimer();state.pending=null;
+  if(!state.review)state.busy=false;
+  status(message||'Countdown canceled. You can try again.');buildStrip();
+  if(message)stripToast(message);
+}
+function capture(){
+  if(state.busy||!remoteReady())return status('Wait until both cameras are connected and ready.','bad');
+  if(!localVid().videoWidth)return status('Your camera is not ready.','bad');
+  if(state.review)return status('Approve your previous photo together first.','bad');
+  const p={id:randomShotId(),row:state.row,initiator:true,sentAt:Date.now(),remoteDraft:null};
+  state.pending=p;state.busy=true;state.previewRow=true;buildStrip();
+  shutterStatus('counting','Checking that your partner is ready…');
+  status('Asking your partner to get ready for moment '+p.row+'…');
+  p.timeout=setTimeout(()=>{if(state.pending===p)shutterAbort('Partner did not confirm. Check their camera and try again.');},8000);
+  send({type:'prepare',id:p.id,row:p.row,sentAt:p.sentAt});
+}
+function receiveSmart(d){
+  if(!validateShot(d))return;
+  let p=state.pending;
+  if(d.type==='prepare'){
+    if(!remoteReady()||!localVid().videoWidth||state.review)return send({type:'abort',id:d.id,row:d.row,reason:'Camera or review not ready'});
+    if(p){
+      if(!p.initiator||state.role==='A')return send({type:'abort',id:d.id,row:d.row,reason:'Another shutter in progress'});
+      shutterAbort('Partner is coordinating the shutter; joining their countdown.',false);p=null;
+    }
+    p={id:d.id,row:d.row,initiator:false,remoteDraft:null,sentAt:d.sentAt};
+    state.pending=p;state.busy=true;state.row=d.row;state.previewRow=true;buildStrip();
+    shutterStatus('counting','Partner requested a photo · getting ready…');
+    const peerReceived=Date.now();p.timeout=setTimeout(()=>{if(state.pending===p)shutterAbort('Countdown did not start. Try again.');},10000);
+    send({type:'ready',id:p.id,row:p.row,receivedAt:peerReceived,sentAt:Date.now()});
+    return;
+  }
+  if(d.type==='abort'){
+    if(p&&p.id===d.id)shutterAbort(d.reason?'Shutter canceled: '+String(d.reason).slice(0,90):'Partner canceled the countdown.',false);
+    else if(state.review&&state.review.id===d.id&&(!state.review.candidate.A||!state.review.candidate.B))discardIncomplete(false);
+    return;
+  }
+  if(d.type==='ready'){
+    if(!p||!p.initiator||p.id!==d.id||p.row!==d.row||!Number.isFinite(d.receivedAt)||!Number.isFinite(d.sentAt))return;
+    clearTimeout(p.timeout);
+    const now=Date.now();
+    // Peer clock offset (responder clock minus initiator clock), NTP-style estimate.
+    const offset=((d.receivedAt-p.sentAt)+(d.sentAt-now))/2;
+    // 1.8s lead for start acknowledgement, then a full 5s for positioning.
+    p.target=now+6800;p.phase='arming';
+    shutterStatus('counting','Both ready · synchronizing countdown…');
+    p.timeout=setTimeout(()=>{if(state.pending===p&&p.phase==='arming')shutterAbort('Could not confirm the synchronized countdown. Try again.');},3000);
+    send({type:'start',id:p.id,row:p.row,at:p.target,offset:offset,seconds:SHUTTER_SECONDS});
+    return;
+  }
+  if(d.type==='start'){
+    if(!p||p.initiator||p.id!==d.id||p.row!==d.row||!Number.isFinite(d.at)||!Number.isFinite(d.offset)||d.seconds!==SHUTTER_SECONDS)return;
+    clearTimeout(p.timeout);p.target=d.at+d.offset;
+    if(p.target<Date.now()+4500||p.target>Date.now()+12000)return shutterAbort('Timing changed too much. Please try again.');
+    send({type:'started',id:p.id,row:p.row});
+    runTimedShutter(p);return;
+  }
+  if(d.type==='started'){
+    if(!p||!p.initiator||p.id!==d.id||p.row!==d.row||p.phase!=='arming')return;
+    clearTimeout(p.timeout);runTimedShutter(p);return;
+  }
+  if(d.type==='vote'){
+    if(!state.review||state.review.id!==d.id||state.review.row!==d.row||!['keep','retake'].includes(d.vote))return;
+    state.review.votes[state.role==='A'?'B':'A']=d.vote;renderReview();resolveVotes();return;
+  }
+  if(d.type==='keep-commit'){
+    if(!state.review||state.review.id!==d.id||state.review.row!==d.row)return;
+    // Recover from a missed vote packet: the other partner confirms both votes were keep.
+    state.review.votes.A='keep';state.review.votes.B='keep';commitPair();return;
+  }
+  if(d.type==='retake-confirm'){
+    if(!state.review||state.review.id!==d.id||state.review.row!==d.row)return;
+    state.review.votes.A='retake';state.review.votes.B='retake';resetForRetake();return;
+  }
+}
+function runTimedShutter(p){
+  if(state.pending!==p)return;
+  p.phase='countdown';clearShutterTimer();
+  const tick=()=>{
+    if(state.pending!==p)return clearShutterTimer();
+    if(!remoteReady())return shutterAbort('Partner camera disconnected before capture.');
+    const left=p.target-Date.now();
+    if(left<=0){clearShutterTimer();takeTimedShot(p);return;}
+    if(left>SHUTTER_SECONDS*1000){$('count').classList.remove('show');shutterStatus('counting','Both ready · starting in a moment…');return;}
+    const seconds=Math.ceil(left/1000);$('count').textContent=String(seconds);
+    $('count').classList.add('show');shutterStatus('counting','Capturing moment '+p.row+' in '+seconds+'…');
+    if(p.lastShownSecond!==seconds){p.lastShownSecond=seconds;notify('TA_CAMERA_COUNTDOWN',{seconds});}
+  };
+  tick();state.shutterTimer=setInterval(tick,55);
+}
+async function takeTimedShot(p){
+  if(state.pending!==p)return;
+  try{
+    if(!state.stream||!localVid().videoWidth)throw Error('Your camera lost its video stream.');
+    const flash=$('flash');flash.style.opacity='1';setTimeout(()=>{flash.style.opacity='0';},140);
+    let local='';for(const quality of [.82,.70,.57,.43]){local=jpg(localVid(),720,900,state.front,quality);if(validJpeg(local))break;}
+    if(!validJpeg(local))throw Error('Photo could not be captured. Try again.');
+    const candidate={A:null,B:null};candidate[state.role]=local;
+    if(p.remoteDraft)candidate[state.role==='A'?'B':'A']=p.remoteDraft;
+    state.review={id:p.id,row:p.row,candidate,votes:{A:null,B:null},timedOut:false,waitTimer:null};
+    const r=state.review;
+    r.waitTimer=setTimeout(()=>{if(state.review===r&&(!r.candidate.A||!r.candidate.B)){r.timedOut=true;renderReview();status('One photo has not arrived. You can retry without losing earlier approved pictures.','bad');}},10000);
+    state.pending=null;state.previewRow=false;buildStrip();
+    const thumb=jpg(localVid(),350,420,state.front,.57);
+    if(validJpeg(thumb)&&thumb.length<160000)send({type:'shot',id:p.id,row:p.row,side:state.role,image:thumb});
+    $('captureInfo').textContent='Captured moment '+p.row+'. Wait for both pictures, then agree to Keep or Retake.';
+    shutterStatus('review','Captured · waiting for both partners to approve');
+    status('Photo captured. Both partners review the pair before it becomes final.','ok');
+  }catch(e){shutterAbort('Photo failed: '+(e.message||'Unknown camera error'));}
+}
+function renderReview(){if(!state.review)return;state.previewRow=false;buildStrip();shutterStatus('review','Moment '+state.review.row+' · keep or retake together');}
+function discardIncomplete(share=true){
+  const r=state.review;if(!r||r.candidate.A&&r.candidate.B)return;
+  if(share)send({type:'abort',id:r.id,row:r.row,reason:'Missing photo'});
+  clearTimeout(r.waitTimer);
+  clearTimeout(r.waitTimer);const row=r.row;state.review=null;state.busy=false;state.row=row;state.previewRow=true;
+  buildStrip();status('Incomplete attempt discarded. Both can try that row again.','ok');
+  notify('TA_CAMERA_REVIEW_STATUS',{phase:'ready',row,message:'Incomplete photo cleared. Ready to try again.'});
+}
+function votePair(vote){
+  const r=state.review;
+  if(!r||!r.candidate.A||!r.candidate.B||!remoteReady())return status('Wait for both photos and an active connection before voting.','bad');
+  r.votes[state.role]=vote;send({type:'vote',id:r.id,row:r.row,vote});
+  renderReview();resolveVotes();
+}
+function resolveVotes(){
+  const r=state.review;if(!r||r.votes.A===null||r.votes.B===null)return;
+  if(r.votes.A==='keep'&&r.votes.B==='keep'){
+    send({type:'keep-commit',id:r.id,row:r.row});commitPair();
+  }else if(r.votes.A==='retake'&&r.votes.B==='retake'){
+    send({type:'retake-confirm',id:r.id,row:r.row});resetForRetake();
+  }else{
+    status('One chose Keep and the other chose Retake. Please agree or change your vote.');
+    $('captureInfo').textContent='Different decisions. Tap Keep or Retake to update your choice.';
+  }
+}
+function commitPair(){
+  const r=state.review;if(!r||!r.candidate.A||!r.candidate.B)return;
+  clearTimeout(r.waitTimer);const doneRow=r.row;state.shots[doneRow-1]={A:r.candidate.A,B:r.candidate.B};
+  const savedLocal=r.candidate[state.role];state.review=null;state.busy=false;
+  state.previewRow=false;buildStrip();bridgeShot(savedLocal,doneRow);
+  const next=state.shots.findIndex(x=>!x.A||!x.B);
+  if(next>=0){changeRow(next+1,true);status('Both approved moment '+doneRow+'! Moving to moment '+(next+1)+'.','ok');}
+  else {status('Both approved all four moments! Preview your strip and save PNG. ♡','ok');stripToast('Your four pairs are ready. Preview and download!');}
+  $('captureInfo').textContent='Moment '+doneRow+' saved in this live strip. Save your own photo in the Apps Script tab, too.';
+  notify('TA_CAMERA_REVIEW_STATUS',{phase:'approved',row:doneRow,message:'Both partners kept photo '+doneRow+'. Save it in the booth.'});
+}
+function resetForRetake(){
+  const r=state.review;if(!r)return;
+  clearTimeout(r.waitTimer);const row=r.row;state.review=null;state.busy=false;state.row=row;state.previewRow=true;buildStrip();
+  status('Both approved a retake. Re-pose together and tap Smart Shutter.','ok');
+  $('captureInfo').textContent='Ready to retake moment '+row+'. Your previously approved photo is kept until a new pair is accepted.';
+  notify('TA_CAMERA_REVIEW_STATUS',{phase:'retake',row,message:'Both partners approved a retake. Press Smart Shutter again.'});
+}
 function bridgeShot(photo,row){if(!bridge)return;clearInterval(state.photoAckTimer);state.photoToSend=photo;let tries=0;const push=()=>{if(!state.photoToSend)return;notify('TA_CAMERA_PHOTO',{slot:row,dataUrl:state.photoToSend});if(++tries>18){clearInterval(state.photoAckTimer);$('captureInfo').textContent='Could not transfer to Apps Script; download your photo strip here instead.';}};push();state.photoAckTimer=setInterval(push,900);}
-function stop(){notify('TA_CAMERA_CLOSED');state.closed=true;clearInterval(state.refreshTimer);clearInterval(state.helloTimer);clearInterval(state.photoAckTimer);state.photoToSend='';try{state.conn?.close();}catch(e){}try{state.call?.close();}catch(e){}try{state.peer?.destroy();}catch(e){}state.stream?.getTracks().forEach(t=>t.stop());state.stream=null;state.partnerStream=null;notify('TA_CAMERA_CLOSED');$('selfVideo').srcObject=null;$('remoteVideo').srcObject=null;state.joined=false;status('Both cameras stopped. Refresh to reconnect.');updateButtons();}
+function stop(){if(state.pending)shutterAbort('',true);notify('TA_CAMERA_CLOSED');state.closed=true;clearInterval(state.refreshTimer);clearInterval(state.helloTimer);clearInterval(state.photoAckTimer);state.photoToSend='';try{state.conn?.close();}catch(e){}try{state.call?.close();}catch(e){}try{state.peer?.destroy();}catch(e){}state.stream?.getTracks().forEach(t=>t.stop());state.stream=null;state.partnerStream=null;notify('TA_CAMERA_CLOSED');$('selfVideo').srcObject=null;$('remoteVideo').srcObject=null;state.joined=false;status('Both cameras stopped. Refresh to reconnect.');updateButtons();}
 // Creating an image can be confirmed. Browser-to-disk completion cannot: browsers do not
 // expose a trustworthy "file saved" event to web pages. The Save link is a real user click.
 let stripPreviewObjectUrl='', stripToastTimer=null, stripBuilding=false;
@@ -274,7 +551,22 @@ $('closeStripPreview').addEventListener('click',hideStripPreview);
 $('backStripPreview').addEventListener('click',hideStripPreview);
 $('stripPreview').addEventListener('click',e=>{if(e.target===$('stripPreview'))hideStripPreview();});
 window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('stripPreview').classList.contains('hidden'))hideStripPreview();});
-$('join').addEventListener('click',join);$('capture').addEventListener('click',capture);$('flip').addEventListener('click',flip);$('save').addEventListener('click',downloadStrip);$('disconnect').addEventListener('click',stop);window.addEventListener('pagehide',stop);
+function copyPartnerLink(){
+ const room=$('room').value.trim().toUpperCase();
+ if(!/^[A-Z0-9]{10}$/.test(room)){status('Enter your 10-character room code first.','bad');$('room').focus();return;}
+ const other=$('side').value==='A'?'B':'A';const url=new URL(location.href);for(const key of ['pin','nonce','targetOrigin','room','side'])url.searchParams.delete(key);
+ url.searchParams.set('room',room);url.searchParams.set('side',other);
+ const txt='Join me in our LDR photobooth ♡\n'+url.toString()+'\nI will send our PIN privately.';
+ if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(()=>stripToast('Partner link copied! Send the PIN separately.')).catch(()=>prompt('Copy this invitation:',txt));}
+ else prompt('Copy this invitation:',txt);
+}
+$('invitePartner').addEventListener('click',copyPartnerLink);
+$('togglePin').addEventListener('click',()=>{const show=$('pin').type==='password';$('pin').type=show?'text':'password';$('togglePin').textContent=show?'Hide PIN':'Show PIN';$('togglePin').setAttribute('aria-pressed',String(show));});
+$('helpCamera').addEventListener('click',()=>{alert('Connection checklist:\n1. Open the same HTTPS camera site on both phones.\n2. Enter the same room code and PIN.\n3. Choose opposite sides A and B.\n4. Allow camera permission in Safari/Chrome.\n5. Keep both pages open and try Wi-Fi/mobile data if video does not connect.\n\nThe video connection uses PeerJS/WebRTC and may not connect on all networks.');});
+$('poseGrid').addEventListener('click',()=>{const on=$('selfVideo').parentElement.classList.toggle('guides');$('remoteVideo').parentElement.classList.toggle('guides',on);$('poseGrid').textContent=on?'⊞ Pose grid: on':'⊞ Pose grid: off';$('poseGrid').setAttribute('aria-pressed',String(on));});
+$('nextEmpty').addEventListener('click',()=>{let idx=state.shots.findIndex(r=>!r.A||!r.B);if(idx<0){stripToast('All four pairs are complete. Select any row to retake together.');return;}changeRow(idx+1,true);stripToast('Selected pair '+(idx+1)+' — ready to pose!');});
+$('discardIncomplete').addEventListener('click',()=>discardIncomplete(true));$('keepPair').addEventListener('click',()=>votePair('keep'));$('retakePair').addEventListener('click',()=>votePair('retake'));$('cancelShutter').addEventListener('click',()=>shutterAbort('Countdown canceled by you.'));
+$('join').addEventListener('click',join);$('capture').addEventListener('click',capture);$('flip').addEventListener('click',flip);$('save').addEventListener('click',downloadStrip);$('disconnect').addEventListener('click',()=>{const count=state.shots.reduce((n,r)=>n+Number(!!r.A)+Number(!!r.B),0);if(count&&!confirm('Stop cameras? Download the photo strip first if you want to keep these '+count+' pictures.'))return;stop();});window.addEventListener('pagehide',stop);
 window.addEventListener('message',e=>{if(!bridge||e.source!==window.opener||e.origin!==parentOrigin)return;const d=e.data;if(!d||d.nonce!==nonce)return;if(d.type==='TA_CAMERA_SHOOT')capture();if(d.type==='TA_CAMERA_SWITCH')flip();if(d.type==='TA_CAMERA_SET_SLOT'&&Number.isInteger(d.slot)&&!state.busy)changeRow(d.slot,true);if(d.type==='TA_CAMERA_STOP')stop();if(d.type==='TA_CAMERA_ACK_PHOTO'){clearInterval(state.photoAckTimer);state.photoToSend='';$('captureInfo').textContent='Photo sent to Google Apps Script. Return to the booth tab to review and save it.';}if(d.type==='TA_CAMERA_ACK_HELLO')clearInterval(state.helloTimer);});
 if(bridge){let attempts=0;state.helloTimer=setInterval(()=>{if(attempts++>30){clearInterval(state.helloTimer);return;}notify('TA_CAMERA_HELLO');},700);}
 $('remoteVideo').addEventListener('loadedmetadata',updateButtons);$('remoteVideo').addEventListener('playing',updateButtons);$('remoteVideo').addEventListener('resize',updateButtons);$('room').value=(query.get('room')||'').toUpperCase().slice(0,10);if(['A','B'].includes(query.get('side')))$('side').value=query.get('side');buildStrip();
