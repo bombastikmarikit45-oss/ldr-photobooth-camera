@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Live camera | Together Apart</title>
+  <style>
+    :root{color-scheme:dark}*{box-sizing:border-box}
+    body{margin:0;padding:22px 14px 40px;text-align:center;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 40% 0%,#62415e,#1d1828 67%)}
+    .container{max-width:530px;margin:auto}h1{font:italic 36px Georgia,serif;margin:7px 0;color:#ffe1ec}
+    p{font-size:13px;color:#e4c9da;line-height:1.6;margin:0 0 14px}
+    .pill{display:inline-block;padding:6px 12px;border-radius:24px;background:#ffffff19;color:#eec5d6;font-weight:750;font-size:11px;letter-spacing:1.4px}
+    .camera{aspect-ratio:4/5;max-height:600px;position:relative;overflow:hidden;background:#141018;border:7px solid #f0bdcd;border-radius:22px;box-shadow:0 20px 50px #140c16a0;margin:14px auto}
+    video,#review{display:block;width:100%;height:100%;object-fit:cover}video{transform:scaleX(-1)}video.back{transform:none}
+    #review{position:absolute;inset:0}#count{position:absolute;inset:0;background:#0008;display:none;place-items:center;font:900 140px Georgia,serif;text-shadow:0 8px 20px #000a}
+    #flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none;transition:opacity .3s}
+    .hidden{display:none!important}button{background:#c46e96;color:white;border:0;border-radius:12px;padding:13px 19px;font-size:15px;font-weight:800;margin:4px;cursor:pointer;min-height:46px}
+    button.secondary{background:#57415c}button:disabled{opacity:.55;cursor:not-allowed}
+    #status{font-size:13px;color:#f4c9d6;min-height:33px;margin-top:12px;line-height:1.5}.error{color:#ffa6bb!important}
+    .note{color:#cdb8ca;font-size:12px;margin-top:12px}.on{display:inline-block;width:7px;height:7px;border-radius:50%;background:#54d8a6;margin-right:6px}
+    .tip{border:1px solid #745773;background:#ffffff0c;border-radius:12px;padding:11px 13px;text-align:left;margin:12px 0;font-size:12px;line-height:1.5;color:#f6d8e8}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="pill"><span class="on"></span> LIVE CAMERA PREVIEW</div>
+    <h1>Say cheese, my love ♡</h1>
+    <p>See yourself live, take a photo, and add it to your shared LDR photo strip.</p>
+    <div class="camera" aria-label="Live camera preview">
+      <video id="video" autoplay muted playsinline></video>
+      <img id="review" class="hidden" alt="Captured photo ready for review">
+      <div id="count" aria-live="off">3</div><div id="flash"></div>
+    </div>
+    <div>
+      <button id="enable">▶ Enable camera</button>
+      <button id="shoot" class="hidden" disabled>♥ Capture · 3 seconds</button>
+      <button id="switch" class="secondary hidden">⇄ Flip camera</button>
+      <button id="retake" class="secondary hidden">↻ Retake</button>
+      <button id="download" class="hidden">↓ Download picture</button>
+      <button id="close" class="secondary">✕ Close</button>
+    </div>
+    <div id="status" role="status">Select Enable camera to start your live preview.</div>
+    <div id="standaloneTip" class="tip hidden">This page is open by itself, so photos cannot be sent automatically to the photobooth. After Capture, choose <strong>Download picture</strong>, return to your LDR photobooth, and choose <strong>Upload photo</strong>. For automatic transfer, use Start live preview inside the photobooth.</div>
+    <p class="note">The preview stays on your device. In connected mode, temporary preview frames are shown in your photobooth tab; only a photo you explicitly save is uploaded to Google Drive.</p>
+  </main>
+  <script>
+  'use strict';
+  const $=id=>document.getElementById(id),qs=new URLSearchParams(location.search);
+  const nonce=qs.get('nonce')||'',targetOrigin=qs.get('targetOrigin')||'';
+  let parentOrigin='';
+  try{const u=new URL(targetOrigin);if(u.protocol==='https:')parentOrigin=u.origin;}catch(e){}
+  const connected=!!nonce&&!!parentOrigin&&!!window.opener;
+  let stream=null,front=true,busy=false,closed=false,framesTimer=null,handshakeTimer=null;
+  let captured='',photoAckTimer=null;
+  function notify(type,payload={}){
+    if(!connected||closed||!window.opener||window.opener.closed)return false;
+    try{window.opener.postMessage({type,nonce,...payload},parentOrigin);return true;}catch(e){return false;}
+  }
+  function showStatus(message,error=false){$('status').textContent=message;$('status').classList.toggle('error',error);}
+  function stopFrames(){clearInterval(framesTimer);framesTimer=null;}
+  function stopTracks(){stopFrames();if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}const v=$('video');v.srcObject=null;}
+  function showButtons(mode){
+    $('enable').classList.toggle('hidden',mode!=='idle');
+    $('shoot').classList.toggle('hidden',mode!=='live');$('shoot').disabled=mode!=='live';
+    $('switch').classList.toggle('hidden',mode!=='live');$('switch').disabled=mode!=='live';
+    $('retake').classList.toggle('hidden',mode!=='review');
+    $('download').classList.toggle('hidden',mode!=='review');
+    $('review').classList.toggle('hidden',mode!=='review');
+  }
+  function drawCrop(canvas,video,mirror){
+    const vw=video.videoWidth,vh=video.videoHeight;
+    if(!vw||!vh)return false;
+    const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,scale=Math.max(w/vw,h/vh),sw=w/scale,sh=h/scale;
+    ctx.save();if(mirror){ctx.translate(w,0);ctx.scale(-1,1);}
+    ctx.drawImage(video,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,w,h);ctx.restore();return true;
+  }
+  function startFrames(){
+    stopFrames();if(!connected)return;
+    const canvas=document.createElement('canvas');canvas.width=288;canvas.height=360;
+    function frame(){if(!stream||busy||closed||!window.opener||window.opener.closed)return;
+      if(!drawCrop(canvas,$('video'),front))return;
+      try{const data=canvas.toDataURL('image/jpeg',.5);if(data.length<110000)notify('TA_CAMERA_PREVIEW',{frame:data});}catch(e){}
+    }
+    frame();framesTimer=setInterval(frame,650);
+  }
+  function cameraError(err){
+    const type=err&&err.name||'Error';
+    let advice='Camera could not start.';
+    if(!window.isSecureContext||!navigator.mediaDevices){advice='Camera needs an HTTPS page opened in Chrome or Safari.';}
+    else if(type==='NotAllowedError'||type==='SecurityError'){advice='Camera permission was denied. Allow the camera for this site in your browser settings and retry.';}
+    else if(type==='NotFoundError'){advice='No usable camera was found on this device.';}
+    else if(type==='NotReadableError'){advice='Your camera is being used by another app. Close that app and try again.';}
+    else{advice='Could not start camera. ('+type+') Try again or use another browser.';}
+    showStatus(advice,true);notify('TA_CAMERA_ERROR',{message:advice});showButtons('idle');
+  }
+  async function startCamera(){
+    if(busy||closed)return;
+    showStatus('Requesting permission to use the camera…');
+    stopTracks();captured='';clearInterval(photoAckTimer);$('review').removeAttribute('src');
+    if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){cameraError(new Error('HTTPS required'));return;}
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:front?'user':'environment'},width:{ideal:1280},height:{ideal:1600}}});
+      if(closed){stopTracks();return;}
+      const video=$('video');video.classList.toggle('back',!front);video.srcObject=stream;
+      await video.play();showButtons('live');showStatus('Live preview ready. Smile! ♡');
+      notify('TA_CAMERA_READY');startFrames();
+    }catch(err){cameraError(err);}
+  }
+  function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+  async function flip(){if(busy||closed)return;front=!front;await startCamera();}
+  async function shoot(){
+    if(busy||closed||!stream)return;
+    busy=true;$('shoot').disabled=true;$('switch').disabled=true;const count=$('count');count.style.display='grid';
+    try{
+      for(let n=3;n>0;n--){count.textContent=n;notify('TA_CAMERA_COUNTDOWN',{seconds:n});await sleep(1000);}
+      count.style.display='none';$('flash').style.opacity='1';await sleep(150);$('flash').style.opacity='0';
+      const canvas=document.createElement('canvas');canvas.width=720;canvas.height=900;
+      if(!drawCrop(canvas,$('video'),front))throw new Error('Camera preview is not ready.');
+      for(const quality of [.84,.7,.56,.42]){captured=canvas.toDataURL('image/jpeg',quality);if(captured.length<1130000)break;}
+      if(captured.length>1230000)throw new Error('Snapshot is too large. Try another camera.');
+      stopTracks();$('review').src=captured;showButtons('review');
+      if(connected){
+        showStatus('Photo captured! Transferring to the photobooth…');
+        // Retry until the photobooth acknowledges delivery, protecting against tab suspension.
+        let attempts=0;
+        const send=()=>{if(closed||!captured)return;notify('TA_CAMERA_PHOTO',{dataUrl:captured});if(++attempts>=30){
+          clearInterval(photoAckTimer);showStatus('Could not confirm transfer. Download your picture, then upload it in your photobooth.',true);
+        }};
+        send();photoAckTimer=setInterval(send,700);
+      }else showStatus('Photo captured! Download your picture and upload it in the photobooth.');
+    }catch(err){showStatus(err.message||'Capture failed',true);showButtons('live');startFrames();}
+    finally{busy=false;count.style.display='none';}
+  }
+  function download(){if(!captured)return;const a=document.createElement('a');a.href=captured;a.download='Together-Apart-Photo.jpg';document.body.appendChild(a);a.click();a.remove();}
+  function closeCamera(){if(closed)return;notify('TA_CAMERA_CLOSED');closed=true;clearInterval(handshakeTimer);clearInterval(photoAckTimer);stopTracks();window.close();if(!connected)showStatus('Camera stopped. You can close this tab.');}
+  $('enable').addEventListener('click',startCamera);
+  $('shoot').addEventListener('click',shoot);
+  $('switch').addEventListener('click',flip);
+  $('retake').addEventListener('click',startCamera);
+  $('download').addEventListener('click',download);
+  $('close').addEventListener('click',closeCamera);
+  window.addEventListener('message',event=>{
+    if(!connected||event.source!==window.opener||event.origin!==parentOrigin)return;
+    const data=event.data;if(!data||data.nonce!==nonce)return;
+    if(data.type==='TA_CAMERA_SHOOT')shoot();
+    else if(data.type==='TA_CAMERA_SWITCH')flip();
+    else if(data.type==='TA_CAMERA_STOP')closeCamera();
+    else if(data.type==='TA_CAMERA_ACK_HELLO')clearInterval(handshakeTimer);
+    else if(data.type==='TA_CAMERA_ACK_PHOTO'){
+      clearInterval(photoAckTimer);captured='';showStatus('Photo received! Return to the photobooth to review and save it.');
+      // Do not close immediately on mobile; leaving this page lets the user switch back.
+      setTimeout(()=>{if(!closed)closeCamera();},650);
+    }
+  });
+  window.addEventListener('pagehide',()=>{if(!closed)notify('TA_CAMERA_CLOSED');closed=true;clearInterval(handshakeTimer);clearInterval(photoAckTimer);stopTracks();});
+  if(connected){
+    // The Apps Script page may not be listening when the popup first loads.
+    let attempts=0;
+    handshakeTimer=setInterval(()=>{if(closed||attempts++>30){clearInterval(handshakeTimer);return;}notify('TA_CAMERA_HELLO');},700);
+    // Linked camera still has a manual enable button for browsers that require a tap.
+    showStatus('Tap Enable camera and approve browser permission.');
+  }else{
+    $('standaloneTip').classList.remove('hidden');
+    showStatus('Standalone camera test. Tap Enable camera to start.');
+  }
+  </script>
+</body>
+</html>
