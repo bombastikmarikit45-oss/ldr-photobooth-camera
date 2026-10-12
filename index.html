@@ -11,6 +11,58 @@ main{max-width:1050px;margin:0 auto;padding:20px 15px 65px}header{text-align:cen
 .field{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--muted);font-weight:700}input,select{width:100%;min-height:45px;padding:11px;background:#352538;color:white;border:1px solid #765570;border-radius:10px;font:inherit}input:focus,select:focus{outline:2px solid #df8cae}button{background:#bf638e;border:none;border-radius:11px;min-height:44px;color:white;padding:10px 16px;font:800 13px system-ui;cursor:pointer}button:disabled{opacity:.45;cursor:default}button.alt{background:#644b67}button.ghost{background:#35293f;border:1px solid #6b536c}.setup button{align-self:end}.note{color:#cdb1c5;font-size:12px}.status{min-height:35px;padding:9px 12px;border-radius:10px;background:#ffffff12;color:#fbd3e5;margin-bottom:14px}.status.bad{background:#753545;color:#ffe5ea}.status.ok{background:#284a3d;color:#cdfbe3}.workspace{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:18px;align-items:start}
 .strip{padding:14px 12px 20px;border:2px solid #efc1d3;border-radius:18px;background:#ffecf1;color:#784360;box-shadow:0 18px 50px #08030c70}.striptitle{font:italic 27px Georgia,serif;text-align:center;margin:3px 0 2px}.stripsub{text-align:center;letter-spacing:2px;font-size:9px;margin-bottom:12px}.stripheaders{display:grid;grid-template-columns:1fr 1fr;gap:7px;text-align:center;margin-bottom:7px;font-size:12px;font-weight:900}.striprow{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:7px 0}.tile{background:#321d32;aspect-ratio:4/4.8;position:relative;border:3px solid white;border-radius:9px;overflow:hidden;display:grid;place-items:center;color:#ecc9d9;cursor:pointer}.tile.active{outline:3px solid #e66b9f}.tile video,.tile img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}.mirror{transform:scaleX(-1)}.tile video:not(.mirror){transform:none}.tile .empty{text-align:center;font-size:12px;padding:8px}.tile .empty b{display:block;font:36px Georgia,serif}.tile .tag{position:absolute;left:6px;top:6px;font-size:10px;font-weight:800;background:#ffedf0e6;color:#7c3f60;padding:3px 6px;border-radius:6px;z-index:3}.stripbottom{text-align:center;font:italic 20px Georgia,serif;padding-top:12px}.pane{border-radius:18px;padding:20px;background:#ffffff0c;border:1px solid #6a4b67}.pane h2{font:italic 30px Georgia,serif;color:#ffe1ec;margin:4px 0 11px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:9px}.pairview{aspect-ratio:4/4.8;position:relative;background:#211729;border:3px solid #78516c;border-radius:13px;overflow:hidden}.pairview video{display:block;width:100%;height:100%;object-fit:cover}.pairview .hint{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#dcb9d0;padding:10px;font-size:12px;pointer-events:none}.pairview .corner{position:absolute;top:8px;left:8px;background:#2a1730b8;border-radius:7px;padding:4px 6px;font-size:10px;font-weight:bold}.controls{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.controls button{flex:1;min-width:140px}.count{position:absolute;inset:0;background:#1a1222aa;display:none;place-items:center;font:bold 100px Georgia,serif;color:white;z-index:4}.count.show{display:grid}.pill{display:inline-block;background:#ffffff16;border-radius:99px;padding:4px 9px;font-size:11px;font-weight:800;color:#ffbad3}.help{margin-top:14px;padding:12px;border:1px solid #674e68;border-radius:12px;background:#ffffff0c;font-size:12px;line-height:1.65;color:#ddc1d2}.help strong{color:#ffe3eb}.hidden{display:none!important}.small{font-size:11px;color:#d9bed0}.flash{position:fixed;inset:0;pointer-events:none;background:white;opacity:0;transition:opacity .18s;z-index:100}
 @media(max-width:740px){.workspace{grid-template-columns:1fr}.setup{grid-template-columns:1fr 1fr}.setup button{grid-column:span 2}.strip{max-width:520px;margin:auto}.pane{padding:15px}.pairview{max-height:250px}.striptitle{font-size:24px}}
+
+/* Photo download preview: real preview first, user-initiated save second. */
+.strip-preview-overlay{position:fixed;inset:0;z-index:300;background:#110e19dc;display:flex;align-items:center;justify-content:center;padding:12px}
+.strip-preview-card{background:#fff8fb;color:#402c3c;width:min(510px,100%);max-height:calc(100dvh - 24px);border-radius:21px;box-shadow:0 25px 90px #000a;display:flex;flex-direction:column;overflow:hidden}
+.strip-preview-top{padding:17px 20px 10px;display:flex;justify-content:space-between;align-items:start;gap:12px}
+.strip-preview-top h2{font:italic 27px Georgia,serif;margin:0 0 3px;color:#8a4b6c}
+.strip-preview-top p{font-size:12px;margin:0;color:#8b7080}
+.strip-preview-top button{flex-shrink:0;background:#f4dfea;color:#67425a;min-height:36px;padding:5px 13px}
+.strip-preview-img-wrap{min-height:0;overflow:auto;background:#f4e5ed;text-align:center;padding:12px}
+.strip-preview-img-wrap img{display:block;max-width:100%;width:min(325px,100%);height:auto;margin:auto;border-radius:7px;box-shadow:0 5px 22px #42203644}
+.strip-preview-actions{padding:12px 18px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.strip-preview-actions a{display:inline-flex;min-height:44px;align-items:center;justify-content:center;padding:10px 18px;border-radius:11px;font:800 13px system-ui;text-decoration:none;background:#bf638e;color:white;flex:1}
+.strip-preview-actions .back-btn{background:#e9d8e2;color:#5b3751}
+.strip-preview-message{width:100%;margin:4px 0 0;color:#705467;font-size:12px;line-height:1.5}
+.download-toast{position:fixed;z-index:400;bottom:20px;left:50%;transform:translate(-50%,22px);opacity:0;pointer-events:none;background:#fff7fc;color:#493147;box-shadow:0 12px 34px #0d0710a0;border-radius:12px;padding:12px 16px;max-width:calc(100vw - 26px);font-size:13px;transition:opacity .2s,transform .2s}
+.download-toast.visible{transform:translate(-50%,0);opacity:1}
+@media(max-width:500px){.strip-preview-top h2{font-size:23px}.strip-preview-img-wrap img{width:min(250px,100%)}.strip-preview-actions{padding:9px 12px 14px}}
+
+/* Twelve tactile film-strip choices, with distinct live-strip and PNG treatments. */
+.style-picker{margin:13px 0 19px;border:1px solid #75526f;border-radius:18px;padding:14px;background:#ffffff0a}
+.style-picker-head{display:flex;align-items:baseline;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px}
+.style-picker-head strong{font:italic 24px Georgia,serif;color:#ffe1eb}
+.style-picker-head span{font-size:12px;color:#e0b9cd}
+.theme-gallery{display:flex;gap:11px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:6px 2px 13px;scrollbar-width:thin}
+.style-choice{flex:0 0 104px;background:#382a3c;border:2px solid #655167;border-radius:12px;padding:6px 6px 9px;color:#fce5f0;min-height:158px;display:flex;flex-direction:column;gap:7px;align-items:center;scroll-snap-align:start;transition:background .15s,border .15s,transform .15s}
+.style-choice:hover{transform:translateY(-2px);background:#4b314b}.style-choice.active{border-color:#fff2b6;background:#563c55;box-shadow:0 0 0 2px #bd90bd55}.style-choice:focus-visible{outline:3px solid #fff8b6;outline-offset:2px}
+.style-card-label{font-size:11px;line-height:1.2;text-align:center;font-weight:750}
+.style-art{width:79px;height:113px;display:flex;flex-direction:column;gap:4px;padding:7px;background:var(--sw-bg);border:2px solid var(--sw-border);border-radius:5px;box-shadow:0 2px 9px #0003}
+.style-art-head,.style-art-foot{height:5px;border-radius:10px;background:var(--sw-accent);opacity:.75;margin:1px auto;width:65%}.style-art-foot{width:50%}
+.style-art-pics{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:4px}.style-art-pics i{background:linear-gradient(135deg,var(--sw-card),var(--sw-border));border:2px solid var(--sw-card);border-radius:2px}
+.strip{background:var(--strip-bg,#ffecf1);border-color:var(--strip-border,#efc1d3);color:var(--strip-ink,#784360)}
+.striptitle,.stripbottom{color:var(--strip-ink,#784360)}.stripsub,.stripheaders{color:var(--strip-sub,#ae7892)}
+.strip .tile{border-color:var(--strip-card,white);background:var(--strip-border,#321d32)}.strip .tile.active{outline-color:var(--strip-accent,#e66b9f)}
+.strip .tile .tag{color:var(--strip-ink,#7c3f60);background:var(--strip-card,#fff)}
+.strip[data-mode="film"] .tile{border-radius:2px;box-shadow:0 0 0 2px var(--strip-ink,#443)}
+.strip[data-mode="film"] .striprow{padding:0 10px;border-left:5px dotted var(--strip-ink,#443);border-right:5px dotted var(--strip-ink,#443)}
+.strip[data-mode="polaroid"] .tile{border-width:5px;border-bottom-width:14px;border-radius:3px;box-shadow:0 4px 7px #0002}
+.strip[data-mode="polaroid"] .tile:nth-child(odd){transform:rotate(-1deg)}
+.strip[data-mode="polaroid"] .tile:nth-child(even){transform:rotate(1deg)}
+.strip[data-mode="modern"] .tile{border-radius:0;border-width:2px}
+.strip-preview-style{display:flex;align-items:center;gap:9px;padding:8px 16px;color:#67425a;font-size:12px;font-weight:750}
+.strip-preview-style select{background:#fff;color:#44293c;border:1px solid #dec5d6;min-height:40px;flex:1;width:auto}
+@media(max-width:600px){.style-choice{flex-basis:93px;min-height:148px}.style-art{width:74px;height:104px}.style-picker-head strong{font-size:22px}}
+
+/* Additional vintage collection with filters that also appear in exported PNG. */
+.vintage-collection-title{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:11px 2px 0;padding-top:12px;border-top:1px solid currentColor;font:italic 20px Georgia,serif}
+.vintage-collection-title span{font:600 11px system-ui, sans-serif;opacity:.75}
+.style-choice[data-style="vintage-sepia"] .style-art-pics i{filter:sepia(.8)}
+.style-choice[data-style="retro-cream"] .style-art-pics i{filter:sepia(.36) saturate(.8)}
+.style-choice[data-style="old-rose-vintage"] .style-art-pics i{filter:sepia(.3) hue-rotate(-14deg)}
+.style-choice[data-style="classic-film"] .style-art-pics i{filter:grayscale(.9) contrast(1.2)}
+.strip .tile video,.strip .tile img{filter:var(--strip-filter,none)}
 </style>
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 </head>
@@ -24,8 +76,9 @@ main{max-width:1050px;margin:0 auto;padding:20px 15px 65px}header{text-align:cen
  <button id="join">📹 Enable & connect</button>
 </section>
 <div id="status" class="status" role="status" aria-live="polite">Enter the same room code and PIN on both devices. Select opposite sides.</div>
+<section class="style-picker" aria-label="Photostrip design gallery"><div class="style-picker-head"><strong>Pick your photostrip style ♡</strong><span>16 designs · selected: <b id="chosenStyleLabel">Blush Romance</b></span></div><div id="themeGallery" class="theme-gallery" role="group" aria-label="Choose a photostrip design"></div><div class="vintage-collection-title">✦ Vintage Collection <span>4 new timeless looks</span></div><div id="vintageGallery" class="theme-gallery" role="group" aria-label="Choose a vintage photostrip design"></div><input id="theme" type="hidden" value="blush"></section>
 <div class="workspace">
-<section class="strip" aria-label="Four-pair photo strip">
+<section class="strip" id="themeTarget" aria-label="Four-pair photo strip">
 <div class="striptitle">Our little moments ♡</div><div class="stripsub">TWO HEARTS · ONE FRAME</div>
 <div class="stripheaders"><span>SIDE A · LEFT</span><span>SIDE B · RIGHT</span></div>
 <div id="rows"></div>
@@ -37,19 +90,88 @@ main{max-width:1050px;margin:0 auto;padding:20px 15px 65px}header{text-align:cen
  <p class="note">You can see each other's poses in real time when both devices are connected. Tap a row in the strip to select it.</p>
  <div class="pair"><div class="pairview"><video id="selfVideo" autoplay playsinline muted></video><div class="hint" id="selfHint">Enable your camera</div><div class="corner">YOU</div></div><div class="pairview"><video id="remoteVideo" autoplay playsinline muted></video><div class="hint" id="remoteHint">Waiting for your partner</div><div class="corner">PARTNER</div></div></div>
  <p style="margin:12px 0 3px">Taking photo pair <strong id="slotNum">1</strong> of 4</p>
- <div class="controls"><button id="capture" disabled>📸 Capture together · 3s</button><button id="flip" class="alt" disabled>⇄ Flip camera</button><button id="save" class="ghost">↓ Download 4-pair strip</button><button id="disconnect" class="ghost" disabled>✕ Stop cameras</button></div>
+ <div class="controls"><button id="capture" disabled>📸 Capture together · 3s</button><button id="flip" class="alt" disabled>⇄ Flip camera</button><button id="save" class="ghost">👁 Preview & download strip</button><button id="disconnect" class="ghost" disabled>✕ Stop cameras</button></div>
  <div id="captureInfo" class="note">Both partners must connect to capture a paired photo.</div>
  <div class="help"><strong>How to use:</strong> Open this same GitHub Pages link on both phones. Enter the Apps Script photobooth room code and PIN. Creator chooses A and partner chooses B. Enable both cameras. See your poses side-by-side and press Capture together. Your 4 paired moments appear in the strip.<br><br><strong>Saving to Google Drive:</strong> Launch this camera site using <em>Start live preview</em> inside the Apps Script booth to send your own captured picture back for review and saving there. If opened directly, download the completed strip here.</div>
  <p class="small">Camera video is transmitted via WebRTC and is not recorded on a server by this page. The free third-party PeerJS signaling service helps connect your devices. TURN relay is not configured, so some mobile or corporate networks cannot connect. Use this for casual photos, not sensitive/private video.</p>
 </section>
 </div>
-</main><div id="count" class="count">3</div><div id="flash" class="flash"></div>
+</main>
+<div id="stripPreview" class="strip-preview-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="stripPreviewTitle">
+ <div class="strip-preview-card">
+  <div class="strip-preview-top"><div><h2 id="stripPreviewTitle">Preview your photo strip ♡</h2><p>Review all four moments before saving your PNG.</p></div><button type="button" id="closeStripPreview" aria-label="Close photo preview">✕ Close</button></div>
+  <div class="strip-preview-img-wrap"><img id="stripPreviewImage" alt="Full combined LDR photostrip preview showing both partners' four paired moments"></div>
+  <div class="strip-preview-style"><label for="modalStyleSelect">Try another style</label><select id="modalStyleSelect" aria-label="Change photostrip design"></select></div>
+  <div class="strip-preview-actions"><a id="stripDownloadLink" href="#" download>↓ Save PNG to device</a><button type="button" id="backStripPreview" class="back-btn">Back to booth</button><p id="stripDownloadStatus" class="strip-preview-message" role="status" aria-live="polite">Preview ready. Press Save PNG. On iPhone, you can also touch and hold the preview image to save it.</p></div>
+ </div>
+</div>
+<div id="downloadToast" class="download-toast" role="status" aria-live="polite"></div>
+<div id="count" class="count">3</div><div id="flash" class="flash"></div>
 <script>
 'use strict';
 const $=id=>document.getElementById(id), query=new URLSearchParams(location.search);
 const nonce=query.get('nonce')||'', tOrigin=query.get('targetOrigin')||'';
 let parentOrigin='';try{const u=new URL(tOrigin);if(u.protocol==='https:')parentOrigin=u.origin;}catch(e){}
 const bridge=!!nonce&&!!parentOrigin&&!!window.opener;
+
+/* Personalizable photostrip styles: identical IDs, palettes and export choices in both apps. */
+const STRIP_STYLES = [
+{id:'blush',name:'Blush Romance',bg:'#fff1f4',card:'#ffffff',ink:'#86445e',sub:'#a46d83',border:'#e9b7cc',accent:'#c66790',mode:'classic',title:'Our little moments ♡',tagline:'Miles apart. Close at heart.'},
+{id:'vintage',name:'Vintage Film',bg:'#efe3c9',card:'#fff8e8',ink:'#5b4937',sub:'#8e775e',border:'#c5a681',accent:'#8c7456',mode:'film',title:'Our vintage love story',tagline:'Our favorite kind of memories.'},
+{id:'midnight',name:'Midnight Love',bg:'#231e32',card:'#3b3047',ink:'#fff0f3',sub:'#d9adc8',border:'#735371',accent:'#e0a8ce',mode:'classic',title:'After dark, still together',tagline:'Under the same moon ♡'},
+{id:'cherry',name:'Cherry Pop',bg:'#ffdee0',card:'#fff7f0',ink:'#9e3045',sub:'#c0616b',border:'#ec929f',accent:'#ec456e',mode:'polaroid',title:'Sweet like cherries',tagline:'You make every moment sweeter.'},
+{id:'lavender',name:'Lavender Dream',bg:'#efe7ff',card:'#ffffff',ink:'#6e568e',sub:'#9882c0',border:'#cdbbed',accent:'#ab8de6',mode:'classic',title:'Dreaming of us ♡',tagline:'You are my favorite dream.'},
+{id:'ocean',name:'Ocean Breeze',bg:'#e0f5fa',card:'#fcfeff',ink:'#2b6577',sub:'#578e9e',border:'#a4d6e2',accent:'#4ca4ba',mode:'modern',title:'Across the blue',tagline:'Every wave brings us closer.'},
+{id:'sunset',name:'Golden Hour',bg:'#fff0d9',card:'#fffaf0',ink:'#8b5442',sub:'#b67d60',border:'#eac09a',accent:'#ec955b',mode:'polaroid',title:'Caught in golden hour',tagline:'You feel like sunshine.'},
+{id:'sage',name:'Sage Garden',bg:'#e5ecdd',card:'#fafcf5',ink:'#465f50',sub:'#6f8c73',border:'#bbcbb2',accent:'#819d7f',mode:'film',title:'Growing together',tagline:'Love blooms beyond distance.'},
+{id:'minimal',name:'Minimal White',bg:'#f6f6f4',card:'#ffffff',ink:'#30343b',sub:'#6e757c',border:'#d5d9db',accent:'#66747d',mode:'modern',title:'Simply us.',tagline:'The moments matter.'},
+{id:'retro',name:'Retro Arcade',bg:'#241b38',card:'#36294a',ink:'#fcdd86',sub:'#b4c1f4',border:'#7150b0',accent:'#ff79ae',mode:'film',title:'Player one + player two',tagline:'Love has no distance limit.'},
+{id:'scrapbook',name:'Sweet Scrapbook',bg:'#fff4e9',card:'#ffffff',ink:'#895c65',sub:'#bb8293',border:'#eac3c2',accent:'#de8ca2',mode:'polaroid',title:'Our memory book ♡',tagline:'Every picture tells our story.'},
+{id:'starlight',name:'Starry Night',bg:'#121d3b',card:'#253455',ink:'#fce9cb',sub:'#aac2e7',border:'#506493',accent:'#a2bcff',mode:'modern',title:'Written in the stars',tagline:'One sky, two hearts.'},
+{id:'vintage-sepia',name:'Vintage Sepia',bg:'#ddc5a0',card:'#fff4dc',ink:'#543b2a',sub:'#846a52',border:'#9b7750',accent:'#91633e',mode:'film',filter:'sepia(.82) contrast(1.08) brightness(.95)',vintage:true,title:'Our sepia story',tagline:'The sweetest love stays timeless.'},
+{id:'retro-cream',name:'Retro Cream',bg:'#f5ecd8',card:'#fffaf0',ink:'#6e5440',sub:'#a18b6c',border:'#d9bf93',accent:'#ae8f61',mode:'polaroid',filter:'sepia(.32) saturate(.80) contrast(.92) brightness(1.06)',vintage:true,title:'A little retro love',tagline:'Good old days, made together.'},
+{id:'old-rose-vintage',name:'Old Rose Vintage',bg:'#d7aea8',card:'#fff2ee',ink:'#703f48',sub:'#956e70',border:'#a77478',accent:'#a95f70',mode:'polaroid',filter:'sepia(.32) saturate(.78) hue-rotate(-13deg) contrast(.94)',vintage:true,title:'Time-worn, love-warmed ♡',tagline:'Our love never goes out of style.'},
+{id:'classic-film',name:'Classic Film',bg:'#202022',card:'#eee6d6',ink:'#f6eee0',sub:'#c6bba6',border:'#60605c',accent:'#d8ba7d',mode:'film',filter:'grayscale(.92) sepia(.20) contrast(1.19) brightness(.91)',vintage:true,title:'Love on 35mm',tagline:'Every frame is a love letter.'}
+];
+let currentStripStyle = 'blush';
+function chosenStyle(){return STRIP_STYLES.find(v=>v.id===currentStripStyle)||STRIP_STYLES[0];}
+function stripStyleMarkup(s){
+  return '<span class="style-art" style="--sw-bg:'+s.bg+';--sw-border:'+s.border+';--sw-card:'+s.card+';--sw-accent:'+s.accent+'">'+
+    '<span class="style-art-head"></span><span class="style-art-pics"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="style-art-foot"></span></span><span class="style-card-label">'+s.name+'</span>';
+}
+function mountStyleGallery(){
+  const gallery=document.getElementById('themeGallery');
+  const vintageGallery=document.getElementById('vintageGallery');
+  if(!gallery||!vintageGallery)return;
+  STRIP_STYLES.forEach(s=>{
+    const btn=document.createElement('button');btn.type='button';btn.className='style-choice';btn.dataset.style=s.id;
+    btn.title=s.name;btn.setAttribute('aria-label','Select '+s.name+' photostrip');btn.innerHTML=stripStyleMarkup(s);
+    btn.addEventListener('click',()=>setStripStyle(s.id));(s.vintage?vintageGallery:gallery).appendChild(btn);
+  });
+  setStripStyle('blush',false);
+}
+function setStripStyle(id,announce=true){
+  const style=STRIP_STYLES.find(s=>s.id===id);if(!style)return;
+  currentStripStyle=id;
+  const themeInput=document.getElementById('theme');if(themeInput)themeInput.value=id;
+  const previewBox=document.getElementById('themeTarget');
+  if(previewBox){
+    for(const key of ['bg','card','ink','sub','border','accent'])previewBox.style.setProperty('--strip-'+key,style[key]);
+    previewBox.dataset.mode=style.mode;
+    previewBox.style.setProperty('--strip-filter',style.filter||'none');
+    const title=previewBox.querySelector('.striptitle');if(title)title.textContent=style.title;
+    const foot=previewBox.querySelector('.stripbottom');if(foot)foot.textContent=style.tagline;
+  }
+  document.querySelectorAll('#themeGallery .style-choice, #vintageGallery .style-choice').forEach(b=>{
+    const active=b.dataset.style===id;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active?'true':'false');
+  });
+  const label=document.getElementById('chosenStyleLabel');if(label)label.textContent=style.name;
+  const previewSelect=document.getElementById('modalStyleSelect');if(previewSelect)previewSelect.value=id;
+  if(announce&&typeof stripToast==='function')stripToast('Design changed to '+style.name+'. Preview to see the finished strip.');
+  else if(announce&&typeof toast==='function')toast('Design changed to '+style.name+'. Tap Preview & download.');
+}
+function stripStyleOptions(){return STRIP_STYLES.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join('');}
+
 const state={stream:null,front:true,peer:null,peerId:'',otherId:'',conn:null,call:null,partnerStream:null,joined:false,role:'A',room:'',row:1,shots:Array.from({length:4},()=>({A:null,B:null})),busy:false,closed:false,refreshTimer:null,helloTimer:null,photoAckTimer:null,photoToSend:'',activeShotId:'',remoteConnected:false,lastPairState:false,previewRow:true};
 const validJpeg=s=>typeof s==='string'&&s.startsWith('data:image/jpeg;base64,')&&s.length<1250000;
 const safeHtml=s=>String(s||'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
@@ -80,7 +202,78 @@ function capture(){if(state.busy||!remoteReady())return;const id=crypto.randomUU
 async function startCountdown(row,id){if(state.busy||row<1||row>4)return;state.busy=true;state.activeShotId=id;state.row=row;buildStrip();const el=$('count');el.classList.add('show');try{for(let n=3;n>=1;n--){el.textContent=n;notify('TA_CAMERA_COUNTDOWN',{seconds:n});await wait(1000);}el.classList.remove('show');$('flash').style.opacity='1';setTimeout(()=>$('flash').style.opacity='0',150);if(!state.stream||!localVid().videoWidth)throw Error('Camera not ready.');let local='';for(const q of [.82,.7,.57,.43]){local=jpg(localVid(),720,900,state.front,q);if(validJpeg(local))break;}if(!validJpeg(local))throw Error('Photo too large for upload. Try again.');state.shots[row-1][state.role]=local;const miniature=jpg(localVid(),350,420,state.front,.57);if(miniature.length<155000)send({type:'shot',row,side:state.role,image:miniature});bridgeShot(local,row);$('captureInfo').textContent='Shot '+row+' captured! You can retake a row or continue to the next.';if(row<4)changeRow(row+1,true);else{state.previewRow=false;buildStrip();}status('Photo '+row+' captured! Save it in the photobooth tab, or download the strip.','ok');}catch(e){status(e.message||'Capture failed.','bad');}finally{el.classList.remove('show');state.busy=false;updateButtons();}}
 function bridgeShot(photo,row){if(!bridge)return;clearInterval(state.photoAckTimer);state.photoToSend=photo;let tries=0;const push=()=>{if(!state.photoToSend)return;notify('TA_CAMERA_PHOTO',{slot:row,dataUrl:state.photoToSend});if(++tries>18){clearInterval(state.photoAckTimer);$('captureInfo').textContent='Could not transfer to Apps Script; download your photo strip here instead.';}};push();state.photoAckTimer=setInterval(push,900);}
 function stop(){notify('TA_CAMERA_CLOSED');state.closed=true;clearInterval(state.refreshTimer);clearInterval(state.helloTimer);clearInterval(state.photoAckTimer);state.photoToSend='';try{state.conn?.close();}catch(e){}try{state.call?.close();}catch(e){}try{state.peer?.destroy();}catch(e){}state.stream?.getTracks().forEach(t=>t.stop());state.stream=null;state.partnerStream=null;notify('TA_CAMERA_CLOSED');$('selfVideo').srcObject=null;$('remoteVideo').srcObject=null;state.joined=false;status('Both cameras stopped. Refresh to reconnect.');updateButtons();}
-async function downloadStrip(){const W=960,pad=28,gap=13,photow=(W-2*pad-gap)/2,photoh=470,rowgap=15,H=255+4*(photoh+rowgap)+110,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle='#ffebf1';x.fillRect(0,0,W,H);x.fillStyle='#8f4b6a';x.textAlign='center';x.font='italic 45px Georgia';x.fillText('Our little moments ♡',W/2,85);x.font='22px sans-serif';x.fillText('TOGETHER APART  •  '+state.room,W/2,137);x.font='bold 21px sans-serif';x.fillText('SIDE A',pad+photow/2,210);x.fillText('SIDE B',pad+photow+gap+photow/2,210);for(let i=0;i<4;i++)for(let j=0;j<2;j++){const side=j===0?'A':'B',left=pad+j*(photow+gap),top=240+i*(photoh+rowgap),shot=state.shots[i][side];x.fillStyle='#f9d1df';x.fillRect(left,top,photow,photoh);if(shot){try{const img=await new Promise((resolve,reject)=>{const item=new Image();item.onload=()=>resolve(item);item.onerror=reject;item.src=shot;});const vw=img.naturalWidth,vh=img.naturalHeight,s=Math.max(photow/vw,photoh/vh),sw=photow/s,sh=photoh/s;x.drawImage(img,(vw-sw)/2,(vh-sh)/2,sw,sh,left,top,photow,photoh);}catch(e){}}else{x.fillStyle='#a9798d';x.textAlign='center';x.font='36px Georgia';x.fillText('♡',left+photow/2,top+photoh/2);}}x.fillStyle='#8f4b6a';x.textAlign='center';x.font='italic 26px Georgia';x.fillText('Miles apart. Close at heart.',W/2,H-45);const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='Together-Apart-Live-'+state.room+'.png';document.body.appendChild(a);a.click();a.remove();}
+// Creating an image can be confirmed. Browser-to-disk completion cannot: browsers do not
+// expose a trustworthy "file saved" event to web pages. The Save link is a real user click.
+let stripPreviewObjectUrl='', stripToastTimer=null, stripBuilding=false;
+function stripToast(message){const el=$('downloadToast');el.textContent=message;el.classList.add('visible');clearTimeout(stripToastTimer);stripToastTimer=setTimeout(()=>el.classList.remove('visible'),5500);}
+function hideStripPreview(){const el=$('stripPreview');el.classList.add('hidden');$('stripPreviewImage').removeAttribute('src');$('stripDownloadLink').removeAttribute('href');if(stripPreviewObjectUrl){URL.revokeObjectURL(stripPreviewObjectUrl);stripPreviewObjectUrl='';}}
+function canvasBlob(canvas){return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Unable to generate PNG.')),'image/png'));}
+function paintSticker(cx,text,x,y,color,rot=0){cx.save();cx.translate(x,y);cx.rotate(rot);cx.fillStyle=color;cx.font='italic 31px Georgia';cx.textAlign='center';cx.fillText(text,0,0);cx.restore();}
+
+// Gentle deterministic analog texture; applied to the actual exported PNG as well as the preview.
+function addVintageGrain(ctx,w,h,style){
+  if(!style.vintage)return;
+  ctx.save();
+  ctx.fillStyle=style.id==='classic-film'?'rgba(255,247,225,.055)':'rgba(75,46,27,.05)';
+  let seed=1927281;
+  for(let i=0;i<1400;i++){
+    seed=(Math.imul(seed,1664525)+1013904223)>>>0;const xx=(seed/4294967296)*w;
+    seed=(Math.imul(seed,1664525)+1013904223)>>>0;const yy=(seed/4294967296)*h;
+    ctx.fillRect(xx,yy,i%9===0?2.1:1.15,i%11===0?2.1:1.15);
+  }
+  ctx.restore();
+}
+function addVintageVignette(ctx,w,h,style){
+  if(!style.vintage)return;
+  ctx.save();ctx.filter='none';
+  const grad=ctx.createRadialGradient(w*.5,h*.46,Math.min(w,h)*.24,w*.5,h*.5,Math.max(w,h)*.72);
+  grad.addColorStop(0,'rgba(0,0,0,0)');grad.addColorStop(.6,'rgba(0,0,0,0)');
+  grad.addColorStop(1,style.id==='classic-film'?'rgba(0,0,0,.40)':'rgba(50,28,12,.23)');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);ctx.restore();
+}
+
+async function composeDownloadStrip(){
+  const p=chosenStyle(),W=960,pad=34,gap=18,photow=(W-2*pad-gap)/2,photoh=466,rowgap=17,H=255+4*(photoh+rowgap)+120,c=document.createElement('canvas');c.width=W;c.height=H;
+  const x=c.getContext('2d');x.fillStyle=p.bg;x.fillRect(0,0,W,H);
+  if(p.mode==='film'){x.fillStyle=p.ink;for(let t=248;t<H-80;t+=66){x.fillRect(10,t,12,28);x.fillRect(W-22,t,12,28);}}
+  x.textAlign='center';x.fillStyle=p.ink;x.font='italic 45px Georgia';x.fillText(p.title,W/2,84);x.font='18px Arial';x.fillStyle=p.sub;x.fillText('TOGETHER APART   ·   '+(state.room||'OUR STORY'),W/2,136);
+  if(p.mode==='modern'){x.fillStyle=p.accent;x.fillRect(pad,164,W-2*pad,3);}
+  x.font='bold 20px Arial';x.fillStyle=p.ink;x.fillText('SIDE A',pad+photow/2,211);x.fillText('SIDE B',pad+photow+gap+photow/2,211);
+  for(let i=0;i<4;i++)for(let j=0;j<2;j++){
+    const side=j===0?'A':'B',left=pad+j*(photow+gap),top=240+i*(photoh+rowgap),shot=state.shots[i][side],angle=p.mode==='polaroid'?(j?-0.012:0.012):0;
+    x.save();x.translate(left+photow/2,top+photoh/2);x.rotate(angle);x.translate(-photow/2,-photoh/2);
+    const extra=p.mode==='polaroid'?18:p.mode==='film'?10:5;
+    x.fillStyle=p.border;x.fillRect(-extra,-extra,photow+2*extra,photoh+2*extra);
+    x.fillStyle=p.card;x.fillRect(0,0,photow,photoh);
+    const innerPad=p.mode==='polaroid'?7:0, innerH=photoh-(p.mode==='polaroid'?24:0);
+    if(shot){try{const img=await new Promise((resolve,reject)=>{const item=new Image();item.onload=()=>resolve(item);item.onerror=reject;item.src=shot;});const vw=img.naturalWidth,vh=img.naturalHeight,s=Math.max((photow-2*innerPad)/vw,innerH/vh),sw=(photow-2*innerPad)/s,sh=innerH/s;x.save();x.filter=p.filter||'none';x.drawImage(img,(vw-sw)/2,(vh-sh)/2,sw,sh,innerPad,innerPad,photow-2*innerPad,innerH);x.restore();x.save();x.translate(innerPad,innerPad);addVintageVignette(x,photow-2*innerPad,innerH,p);x.restore();}catch(e){throw Error('A photo in row '+(i+1)+' could not be opened.');}}
+    else{paintSticker(x,'♡',photow/2,photoh/2,p.sub);}
+    if(p.mode==='polaroid'){x.fillStyle=p.ink;x.font='italic 17px Georgia';x.textAlign='center';x.fillText('moment '+(i+1),photow/2,photoh-3);}
+    x.restore();
+  }
+  addVintageGrain(x,W,H,p);
+  x.fillStyle=p.ink;x.textAlign='center';x.font='italic 29px Georgia';x.fillText(p.tagline,W/2,H-72);x.font='18px Arial';x.fillStyle=p.sub;x.fillText(new Date().toLocaleDateString(),W/2,H-35);
+  return c;
+}
+async function refreshGHPreview(){
+  if(stripBuilding)return;stripBuilding=true;const btn=$('save'),label=btn.textContent;btn.disabled=true;btn.textContent='Preparing preview…';stripToast('Preparing '+chosenStyle().name+' preview…');
+  try{const canvas=await composeDownloadStrip();const blob=await canvasBlob(canvas);hideStripPreview();stripPreviewObjectUrl=URL.createObjectURL(blob);$('stripPreviewImage').src=stripPreviewObjectUrl;
+    const a=$('stripDownloadLink');a.href=stripPreviewObjectUrl;a.download='Together-Apart-'+(state.room||'Our-Moments')+'-'+currentStripStyle+'.png';
+    const count=state.shots.reduce((n,row)=>n+(row.A?1:0)+(row.B?1:0),0);
+    $('stripDownloadStatus').textContent=chosenStyle().name+' · '+(count===8?'All 8 photos are included.':'Only '+count+' of 8 photos captured. Missing cells will be blank.')+' Press Save PNG; on iPhone you can also touch and hold the image.';
+    $('stripPreview').classList.remove('hidden');$('modalStyleSelect').value=currentStripStyle;stripToast(chosenStyle().name+' preview ready!');}
+  catch(e){stripToast('Could not create preview: '+(e.message||'Please try again.'));}
+  finally{btn.disabled=false;btn.textContent=label;stripBuilding=false;}
+}
+async function downloadStrip(){await refreshGHPreview();}
+$('modalStyleSelect').innerHTML=stripStyleOptions();
+$('modalStyleSelect').addEventListener('change',e=>{setStripStyle(e.target.value,false);refreshGHPreview();});
+mountStyleGallery();
+$('stripDownloadLink').addEventListener('click',()=>{const msg='Download requested. Check your browser Downloads or Files. This page cannot confirm the file was saved.';$('stripDownloadStatus').textContent=msg;stripToast(msg);});
+$('closeStripPreview').addEventListener('click',hideStripPreview);
+$('backStripPreview').addEventListener('click',hideStripPreview);
+$('stripPreview').addEventListener('click',e=>{if(e.target===$('stripPreview'))hideStripPreview();});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('stripPreview').classList.contains('hidden'))hideStripPreview();});
 $('join').addEventListener('click',join);$('capture').addEventListener('click',capture);$('flip').addEventListener('click',flip);$('save').addEventListener('click',downloadStrip);$('disconnect').addEventListener('click',stop);window.addEventListener('pagehide',stop);
 window.addEventListener('message',e=>{if(!bridge||e.source!==window.opener||e.origin!==parentOrigin)return;const d=e.data;if(!d||d.nonce!==nonce)return;if(d.type==='TA_CAMERA_SHOOT')capture();if(d.type==='TA_CAMERA_SWITCH')flip();if(d.type==='TA_CAMERA_SET_SLOT'&&Number.isInteger(d.slot)&&!state.busy)changeRow(d.slot,true);if(d.type==='TA_CAMERA_STOP')stop();if(d.type==='TA_CAMERA_ACK_PHOTO'){clearInterval(state.photoAckTimer);state.photoToSend='';$('captureInfo').textContent='Photo sent to Google Apps Script. Return to the booth tab to review and save it.';}if(d.type==='TA_CAMERA_ACK_HELLO')clearInterval(state.helloTimer);});
 if(bridge){let attempts=0;state.helloTimer=setInterval(()=>{if(attempts++>30){clearInterval(state.helloTimer);return;}notify('TA_CAMERA_HELLO');},700);}
